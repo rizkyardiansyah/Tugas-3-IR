@@ -1,0 +1,3 @@
+kueri1
+kueri2
+kueri3

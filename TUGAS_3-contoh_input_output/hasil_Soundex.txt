@@ -1,0 +1,3 @@
+kueri1(A355) : hasil11, hasil12, hasil13, hasil13
+kueri2(S754) : hasil21, hasil22, hasil23
+kueri3(D666) : hasil31, hasil32

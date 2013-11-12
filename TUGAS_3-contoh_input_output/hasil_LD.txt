@@ -1,0 +1,2 @@
+kueri1 : hasil11(2), hasil12(2), hasil13(3), hasil13(5)
+kueri2 : hasil21(2), hasil22(4), hasil23(4)
