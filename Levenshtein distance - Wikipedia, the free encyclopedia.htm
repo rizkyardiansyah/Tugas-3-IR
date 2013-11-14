@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html dir="ltr" class="ve-not-available client-js" lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8"><title>Levenshtein distance - Wikipedia, the free encyclopedia</title>
+<meta name="generator" content="MediaWiki 1.23wmf2">
+<link rel="alternate" type="application/x-wiki" title="Edit this page" href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit">
+<link rel="edit" title="Edit this page" href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit">
+<link rel="apple-touch-icon" href="http://bits.wikimedia.org/apple-touch/wikipedia.png">
+<link rel="shortcut icon" href="http://bits.wikimedia.org/favicon/wikipedia.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="http://en.wikipedia.org/w/opensearch_desc.php" title="Wikipedia (en)">
+<link rel="EditURI" type="application/rsd+xml" href="http://en.wikipedia.org/w/api.php?action=rsd">
+<link rel="copyright" href="http://creativecommons.org/licenses/by-sa/3.0/">
+<link rel="alternate" type="application/atom+xml" title="Wikipedia Atom feed" href="http://en.wikipedia.org/w/index.php?title=Special:RecentChanges&amp;feed=atom">
+<link rel="canonical" href="http://en.wikipedia.org/wiki/Levenshtein_distance">
+<link rel="stylesheet" href="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/load_002.css">
+<style>
+@media print{#centralNotice{display:none}}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:ddb0c98a055632ae8e349c9cf48ac703 */
+.tipsy{padding:5px;position:absolute;z-index:100000;cursor:default}.tipsy-inner{padding:5px 8px 4px 8px; background-color:#ffffff;border:solid 1px #a7d7f9;color:black;max-width:15em;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px; }.tipsy-arrow{position:absolute;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALAgMAAADUwp+1AAAACVBMVEX5+fmn1/n///9s6BFKAAAAAXRSTlMAQObYZgAAACpJREFUCB1jZBD4wMiQMoeRcUU4I9uSaYxSE54xZjn8AtMgPkgcJA9UBwAeDw1Qrb3pVAAAAABJRU5ErkJggg==) no-repeat top left;background:url(//bits.wikimedia.org/static-1.23wmf2/resources/jquery.tipsy/images/tipsy.png?2013-10-31T16:01:40Z) no-repeat top left!ie;width:11px;height:6px} .tipsy-n .tipsy-arrow{top:0px;left:50%;margin-left:-5px} .tipsy-nw .tipsy-arrow{top:1px;left:10px} .tipsy-ne .tipsy-arrow{top:1px;right:10px} .tipsy-s .tipsy-arrow{bottom:0px;left:50%;margin-left:-5px;background-position:bottom left} .tipsy-sw .tipsy-arrow{bottom:0px;left:10px;background-position:bottom left} .tipsy-se .tipsy-arrow{bottom:0px;right:10px;background-position:bottom left} .tipsy-e .tipsy-arrow{top:50%;margin-top:-5px;right:1px;width:5px;height:11px;background-position:top right} .tipsy-w .tipsy-arrow{top:50%;margin-top:-5px;left:0px;width:6px;height:11px}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:cccda4cb6408e5d0323845b327d086d9 */
+.grid *{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box} .grid .left{float:left}.grid .right{float:right}.grid .text-left{text-align:left}.grid .text-right{text-align:right}.grid .text-center{text-align:center}.grid .hide{display:none}.grid .highlight{background:#ffff99} .grid .row{width:100%;max-width:none;min-width:600px;margin:0 auto}.grid .row .row{width:auto;max-width:none;min-width:0;margin:0 -5px}.grid .row.collapse .column,.grid .row.collapse .columns{padding:0}.grid .row .row{width:auto;max-width:none;min-width:0;margin:0 -5px}.grid .row .row.collapse{margin:0}.grid .column,.grid .columns{float:left;min-height:1px;padding:0 5px;position:relative}.grid .column.centered,.grid .columns.centered{float:none;margin:0 auto}.grid .row .one{width:8.333%}.grid .row .two{width:16.667%}.grid .row .three{width:25%}.grid .row .four{width:33.333%}.grid .row .five{width:41.667%}.grid .row .six{width:50%}.grid .row .seven{width:58.333%}.grid .row .eight{width:66.667%}.grid .row .nine{width:75%}.grid .row .ten{width:83.333%}.grid .row .eleven{width:91.667%}.grid .row .twelve{width:100%}.grid .row .offset-by-one{margin-left:8.333%}.grid .row .offset-by-two{margin-left:16.667%}.grid .row .offset-by-three{margin-left:25%}.grid .row .offset-by-four{margin-left:33.333%}.grid .row .offset-by-five{margin-left:41.667%}.grid .row .offset-by-six{margin-left:50%}.grid .row .offset-by-seven{margin-left:58.333%}.grid .row .offset-by-eight{margin-left:66.667%}.grid .row .offset-by-nine{margin-left:75%}.grid .row .offset-by-ten{margin-left:83.333%}.grid .push-two{left:16.667%}.grid .pull-two{right:16.667%}.grid .push-three{left:25%}.grid .pull-three{right:25%}.grid .push-four{left:33.333%}.grid .pull-four{right:33.333%}.grid .push-five{left:41.667%}.grid .pull-five{right:41.667%}.grid .push-six{left:50%}.grid .pull-six{right:50%}.grid .push-seven{left:58.333%}.grid .pull-seven{right:58.333%}.grid .push-eight{left:66.667%}.grid .pull-eight{right:66.667%}.grid .push-nine{left:75%}.grid .pull-nine{right:75%}.grid .push-ten{left:83.333%}.grid .pull-ten{right:83.333%} .grid .row{*zoom:1}.grid .row:before,.grid .row:after{content:"";display:table}.grid .row:after{clear:both}  .grid .block-grid{display:block;overflow:hidden;padding:0}.grid .block-grid > li{display:block;height:auto;float:left}.grid .block-grid.two-up{margin:0 -15px}.grid .block-grid.two-up > li{width:50%;padding:0 15px 15px} .grid .block-grid.three-up{margin:0 -12px}.grid .block-grid.three-up > li{width:33.33%;padding:0 12px 12px} .grid .block-grid.four-up{margin:0 -10px}.grid .block-grid.four-up > li{width:25%;padding:0 10px 10px} .grid .block-grid.five-up{margin:0 -8px}.grid .block-grid.five-up > li{width:20%;padding:0 8px 8px}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:09eb7fe541cbcdc79775eb1a3ef4ceba */
+.mw-editsection{white-space:nowrap;padding-right:0.25em; unicode-bidi:-moz-isolate;unicode-bidi:-webkit-isolate;unicode-bidi:isolate}.mw-editsection-divider{color:#555} .mw-content-ltr .mw-editsection-expanded .mw-editsection-bracket:first-of-type,.mw-content-rtl .mw-editsection-expanded .mw-editsection-bracket:not(:first-of-type){margin-left:-0.25em;margin-right:0.25em;color:#555} .mw-content-rtl .mw-editsection-expanded .mw-editsection-bracket:first-of-type,.mw-content-ltr .mw-editsection-expanded .mw-editsection-bracket:not(:first-of-type){margin-right:-0.25em;margin-left:0.25em;color:#555}.ve-tabmessage-appendix{font-size:0.7em;vertical-align:top;line-height:1.43em;padding-left:0.5em; background-image:none !important;display:inline !important}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:542a80e9a1c6a06bda7dfcbb6858ab0f */
+@-webkit-keyframes centralAuthPPersonalAnimation{0%{opacity:0;-webkit-transform:translateY(-20px)}100%{opacity:1;-webkit-transform:translateY(0)}}@-moz-keyframes centralAuthPPersonalAnimation{0%{opacity:0;-moz-transform:translateY(-20px)}100%{opacity:1;-moz-transform:translateY(0)}}@-o-keyframes centralAuthPPersonalAnimation{0%{opacity:0;-o-transform:translateY(-20px)}100%{opacity:1;-o-transform:translateY(0)}}@keyframes centralAuthPPersonalAnimation{0%{opacity:0;transform:translateY(-20px)}100%{opacity:1;transform:translateY(0)}}.centralAuthPPersonalAnimation{-webkit-animation-duration:1s;-moz-animation-duration:1s;-o-animation-duration:1s;animation-duration:1s;-webkit-animation-fill-mode:both;-moz-animation-fill-mode:both;-o-animation-fill-mode:both;animation-fill-mode:both;-webkit-animation-name:centralAuthPPersonalAnimation;-moz-animation-name:centralAuthPPersonalAnimation;-o-animation-name:centralAuthPPersonalAnimation;animation-name:centralAuthPPersonalAnimation}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:0dcacc990dd02e7db9669ab3090b80f1 */
+.uls-trigger{background:transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAQCAMAAADQzfSkAAABqlBMVEX////f3/+Ov+/n5+fp6enp6eno6Ojp6enn5+ff39/q6urp6enp6enp6enq6urp6en////q6urr6+upv+rU1NTJycnR0dEaGhrp6enT4/SEuuK9vb3l5eU2ktCxsbFdXV1paWmzwc9ITFDo6OhaWlpsbGxtbW2BipSZpK/X19d2dnZ8hI2/v79PT09gZm2CgoLIyMjD0eGksL1JTVHM2+spKywnKCkcHBzAzt3I1+cxMzZxcXFkZGSvr69WW2C8vLyFjphqcXiLlZ8dHh4gISLa2trQ3/Dc3NzZ2dl7e3uioqIfHyBCRko9QEPh4eFgYGDGxsZoaGiPj4/Ly8uRm6a6yNcbGxuSnKfL2uqVn6scHR20tLR/f3+Kioq4uLienp54gIipqanA2e+71u9GSk5yeoKgoKCAgIB0dHRLS0tlZWWDg4PBwcHFxcWxvsxkanGapbCKlJ7O4fNXo9hQn9bM3/OPmaRfZWve3t6mpqbR0dG+vr6JiYnKyspPVFl1s99+fn5srdzm5ubNzc1BREh2s99xsN7S0tIxMzUiIyQ2OTt/iJFwcHBbYWc3S28lAAAAF3RSTlMACBAg7P3LiTYIX6LmmDzeAYMnDN+1MJx17ncAAAEQSURBVHheddBTb0VREIbhVduYWVuHRm3btm3bNv9zJ2v3IE36Xk3yZG4+xkMKw0BREYwJMzkcO38MY37tG6AmYN48YZFxwsbeiys6y/02rT1Wa4TxwoYgpx4adLMbfRubs9tk0cJuYK8ACv1/Xy5LLlIYS5bf2FTUUlJapptiqKwyuOfJEsjq4M3j+YBPYc02X6utTWnvQEwk6wJRNxn29Pb1D2iIg0bEJMaHYWTU6RyfABPZ5BTa7xBxxo2YzPgcPPGFRb4Ey2Qrq2vrXlRk6xampDK+a94/ODw6PjGfkp2dX1y6ZOvVNWKavsutqt6HbGZ5QCqdMUmSnlXqhY6M12CZtKcaUnhtsKz/Tc5m7AfjN0jzWIipawAAAABJRU5ErkJggg==) no-repeat scroll left center;background:transparent url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/icon-language.png?2013-10-31T16:08:20Z) no-repeat scroll left center!ie;background-image:-webkit-linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/icon-language.svg?2013-10-31T16:08:20Z);background-image:-moz-linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/icon-language.svg?2013-10-31T16:08:20Z);background-image:linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/icon-language.svg?2013-10-31T16:08:20Z);padding-left:30px}.uls-menu{position:absolute;z-index:1000;display:none;margin-top:1px; background-color:#ffffff;border:1px solid #ccc;border:1px solid rgba(0,0,0,0.2);-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;-webkit-box-shadow:0 5px 10px rgba(0,0,0,0.2);-moz-box-shadow:0 5px 10px rgba(0,0,0,0.2);box-shadow:0 5px 10px rgba(0,0,0,0.2);-webkit-background-clip:padding-box;-moz-background-clip:padding;background-clip:padding-box}.uls-wide{min-width:715px;width:45%}.uls-title-region a{padding-left:15px}.uls-menu .uls-title{font-weight:normal;border:none;padding-top:1.25em;padding-left:15px;padding-bottom:3px;font-size:18pt;line-height:1.25em;color:#555}.uls-menu .uls-no-results-found-title{font-size:16pt;font-weight:bold;line-height:1.5em;padding-left:6px;padding-top:10px;margin-top:0;margin-bottom:15px;border-bottom:none;color:#555}.uls-menu .uls-lcd-region-section .uls-lcd-region-title{color:#777;font-size:14pt;font-weight:lighter;line-height:1.5em;padding-left:0;margin-top:0;margin-bottom:10px;border-bottom:none}.uls-worldmap{background:transparent url(data:image/png;base64,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) no-repeat scroll right top;background:transparent url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/world_map.png?2013-10-31T16:08:20Z) no-repeat scroll right top!ie;background-image:-webkit-linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/world_map.svg?2013-10-31T16:08:20Z);background-image:-moz-linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/world_map.svg?2013-10-31T16:08:20Z);background-image:linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/world_map.svg?2013-10-31T16:08:20Z);background-size:100%}div.uls-region{cursor:pointer;padding:0;margin:0;height:120px;border-bottom-color:transparent;border-bottom-style:solid;border-bottom-width:2px}.uls-worldmap .uls-region{  float:left}.uls-region a{bottom:2px;left:2px;padding:0;position:absolute;font-size:13px;line-height:1.2em;text-decoration:none;overflow:hidden;text-overflow:ellipsis;width:99%}.uls-region:hover{ background:#3366bb;background:rgba(51,102,187,0.1);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#253366bb,endColorstr=#253366bb );-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#253366bb,endColorstr=#253366bb)"}.map-block .active{border-bottom-color:#3366bb;border-bottom-style:solid}.uls-menu .row .map-block{top:1px;margin-right:0;padding-right:0;float:right;overflow:hidden;opacity:0.7;-moz-transition:opacity 0.2s linear;-o-transition:opacity 0.2s linear;-webkit-transition:opacity 0.2s linear;transition:opacity 0.2s linear}.map-block a{color:#333;opacity:0;-moz-transition:opacity 0.15s linear;-o-transition:opacity 0.15s linear;-webkit-transition:opacity 0.15s linear;transition:opacity 0.15s linear}.uls-menu .map-block:hover,.uls-menu .map-block:hover a{opacity:1;color:#333}.map-block .uls-region-1{border-color:transparent}.map-block:hover .active{border-color:#3366bb}.map-block .active a{font-weight:bold}.icon-close{background:transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPBAMAAADJ+Ih5AAAAFVBMVEX///9YWFhVVVVVVVVYWFhVVVVVVVXoAYr3AAAABnRSTlMAIODAPPuxK62GAAAAS0lEQVR4Xj2NsQnAMBADzxuY38AQXCdN6jRZxGDtP0IQARUS6PiXaBfYqNV/uzVoUyel1S2nY2oApW2AkQHwaj+E5IZ8pSfN2cr6BwiaExOK3fAwAAAAAElFTkSuQmCC) no-repeat scroll center center;background:transparent url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/close.png?2013-10-31T16:08:20Z) no-repeat scroll center center!ie;background-image:-webkit-linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/close.svg?2013-10-31T16:08:20Z);background-image:-moz-linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/close.svg?2013-10-31T16:08:20Z);background-image:linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/close.svg?2013-10-31T16:08:20Z);float:right;padding:15px;cursor:pointer}.uls-menu .languagefilter{background-color:transparent;border:1px solid #c9c9c9;border-radius:2px 2px 2px 2px;box-shadow:0 1px 2px rgba(0,0,0,0.1) inset;color:#333;display:block;padding:6px;-moz-transition:border 0.15s linear 0s;-o-transition:border 0.15s linear 0s;-webkit-transition:border 0.15s linear 0s;transition:border 0.15s linear 0s}.uls-menu .languagefilter:focus{border:1px solid #3366bb}.uls-menu .search{position:relative;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#F0F0F0',endColorstr='#FBFBFB');background:#f8f8f8;background:-webkit-gradient(linear,left top,left bottom,from(#F0F0F0),to(#FBFBFB));background:-webkit-linear-gradient(top,#F0F0F0,#FBFBFB);background:-moz-linear-gradient(top,#F0F0F0,#FBFBFB);background:-ms-linear-gradient(top,#F0F0F0,#FBFBFB);background:-o-linear-gradient(top,#F0F0F0,#FBFBFB);background:linear-gradient(#F0F0F0,#FBFBFB);border-top-color:#AAA;border-top-style:solid;border-top-width:1px;padding:0.8em 0;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#DDD}.uls-menu .search-label{background:transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAA+VBMVEX///9VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUVFRUVFQAAABVVVVWVlZVVVVUVFRWVlZVVVVSUlJVVVVTU1NUVFRVVVVTU1NVVVWAgIBWVlZVVVVVVVVVVVVVVVVUVFRVVVVUVFRWVlZTU1NVVVVVVVVAQEBVVVVmZmZVVVVVVVVVVVVWVlZVVVVUVFRVVVVUVFRVVVVWVlZUVFRVVVVVVVVVVVVVVVVVVVVVVVVQUFBUVFRWVlZXV1dVVVVUVFRVVVVTU1NVVVVVVVVWVlZOTk5TU1NVVVVVVVVXV1dVVVVVVVVUVFRVVVVVVVVdXV1VVVVVVVUA2BLyAAAAUnRSTlMAD8jxe+7NA9GwSU8B/lAYZFysH/A3jr8r3gKVyuBCunD7YYMxaagEMAW5+R6eBpcSPVprndqE3+nhGxBGoTJFOucl99V3DS7PZjhIeKn6kwvLXHAdYgAAAPxJREFUeF7Vz9VuAkEARuFZ1lmkUNylSJG6u7ue93+YJoXMzrAN9/3vTr5kRMyWzhSKdjlrxV3xx1ZM5quVIrjaBODYBBhbgwXNAdPLLZG42bkDfJ2bUD+bx8ZBGzravXBohBmAOQkzbZJsCGXn0A8rA5tC3ek1dkVWAbaFtj0YyiiSfNB5F1oybPaFvivoyihztMBx6MnIwonOFgRqpHT2YU096ttV9aKNE5Zbg3tF1z39uNKY20aoVfAS+lNIfn7N4vEJcAyVBz5Qrz6/vL69fwAQ01x0TOQ8J+qTvj1DJ5UwYlEXlWGr2wt+/6u7vn/jI7HMc3mxxEd58QNaPTmU1TEhpgAAAABJRU5ErkJggg==) no-repeat scroll right center;background:transparent url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/search.png?2013-10-31T16:08:20Z) no-repeat scroll right center!ie;background-image:-webkit-linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/search.svg?2013-10-31T16:08:20Z);background-image:-moz-linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/search.svg?2013-10-31T16:08:20Z);background-image:linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/search.svg?2013-10-31T16:08:20Z);background-size:30px;height:32px;width:32px;float:right}.uls-menu .languagefilter-clear{background:transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPBAMAAADJ+Ih5AAAAGFBMVEX///9VVVVVVVVVVVVTU1NTU1NVVVVVVVUaRpmCAAAAB3RSTlMAGNe/KC75PR3D5wAAAEpJREFUeF49jSEOgDAQBAdRT8oLKpraOiwJb2nwCN7PZsWKu2Qmd7vcO8BxcTZgG5P6SmkJmsdkK+wWUp8FlGcRQ27yRXKSnK60/0yQDIA29VijAAAAAElFTkSuQmCC) no-repeat scroll left center;background:transparent url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/clear.png?2013-10-31T16:08:20Z) no-repeat scroll left center!ie;background-image:-webkit-linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/clear.svg?2013-10-31T16:08:20Z);background-image:-moz-linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/clear.svg?2013-10-31T16:08:20Z);background-image:linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/../images/clear.svg?2013-10-31T16:08:20Z);cursor:pointer;height:32px;position:absolute;width:32px;margin-left:-32px}.uls-menu .filterinput{position:absolute;top:0;left:0;font-size:14px;height:32px;width:100%;text-align:left}.uls-menu .filtersuggestion{padding:6px;background-color:white;color:#888;border:1px transparent;border-radius:2px 2px 2px 2px;box-shadow:0 1px 2px transparent inset;left:1px}.uls-menu .search-input-block{position:relative}@font-face{font-family:'Autonym';src:url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/font/Autonym.eot?2013-10-31T16:08:20Z);src:local('Autonym'),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/lib/jquery.uls/css/font/Autonym.woff?2013-10-31T16:08:20Z) format('woff'),url('font/Autonym.ttf') format('truetype');font-style:normal}.autonym{font-family:'Autonym',sans-serif}.uls-lcd-region-section ul li:hover{background-color:#eaeff7}.uls-lcd-region-section{margin-top:10px} .uls-language-list{height:17em;overflow:auto;width:auto}.uls-language-block ul{margin:0 0 1.5em}.uls-language-list ul li{cursor:pointer;font-weight:normal;overflow:hidden;white-space:nowrap; text-overflow:ellipsis; text-align:left; list-style-image:none;list-style-type:none}.uls-language-list strong{text-decoration:underline}.uls-language-list a{font-weight:normal;text-decoration:none;color:#3366bb;font-size:14px;line-height:1.6em}.uls-menu .uls-language-block .columns{width:22%}.uls-language-block{width:100%}.uls-no-results-view{color:#555;height:100%}.uls-no-found-more{font-size:0.9em;background:#F8F8F8;width:100%;margin-top:1.6em;line-height:1.6em;position:absolute;bottom:0;left:0}.uls-no-found-more a{cursor:pointer}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:8eec8e6724fad77d3b37b88f326bebd3 */
+#pt-uls a.uls-trigger{padding-left:30px}#p-lang .uls-settings-trigger{background:transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAgCAMAAAAVMLmlAAAAA3NCSVQICAjb4U/gAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAALpQTFRF////W1tbgICAWVlZgICAUVFRgICAWVlZhYWFUlJShYWFVFRUgYGBVVVVgYGBVVVVgICAVFRUVVVVVlZWgYGBgICAVFRUgYGBVFRUgICAgYGBVVVVVVVVgYGBVlZWgYGBVFRUgICAVFRUgICAVVVVgICAVlZWgICAVFRUgICAVVVVgICAVFRUgICAVlZWgICAVVVVgICAVVVVgICAVVVVgICAVVVVgICAVVVVgICAVVVVgICAVVVVgICA9Fa9bgAAADx0Uk5TAA4OFBQWFhcXGRlJSUtLWlpbXV9fYGFhZGRlZmlpa2twcIiIioqPj5GRn5+goKGh6+vv7/Dw+fn8/P7+YuRUVgAAAOlJREFUGBmNwcdWAgEURMFLFCUaAcWAEhQYHBRmCN3//1u+BYcVC6s4p2U3OLrrVxN7Xn7uELoH5w65Dx1g6JNnoLazfz++VnZehkZir4pQ3NjzBg5TwtgBhzFh6kDr294UobiykxZc7ezVdLyx8yrw6pM+8GjnDjsf7gj3/WpiJ7Vhl6OW3eC/mlKdo5teZSHNSoM24XqvTCHTvg0MdDIASpn08/6ZSlkJ6jMpLUBhLc3qKEwIIwUURoSJAs2ltC5AIZUWTbjcSulktJayCvCikx7wJG0VttrfEp5eLpfS4uLtgaOmVOeMP8BAM9RClMO9AAAAAElFTkSuQmCC) no-repeat right top;background:transparent url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/resources/css/../images/cog-sprite.png?2013-10-31T16:08:20Z) no-repeat right top!ie;background-image:-webkit-linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/resources/css/../images/cog-sprite.svg?2013-10-31T16:08:20Z);background-image:-moz-linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/resources/css/../images/cog-sprite.svg?2013-10-31T16:08:20Z);background-image:linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/resources/css/../images/cog-sprite.svg?2013-10-31T16:08:20Z);height:16px;width:14px;float:right;cursor:pointer}.skin-vector #p-lang .uls-settings-trigger{ margin-top:3px}#p-lang .uls-settings-trigger:hover{background-position:right -16px}   x:-o-prefocus,body.rtl li#pt-uls{ direction:ltr}#settings-block{border-top:1px solid #C9C9C9;background:#f8f8f8;background:-webkit-gradient(linear,left top,left bottom,from(#FBFBFB),to(#F0F0F0));background:-webkit-linear-gradient(top,#FBFBFB,#F0F0F0);background:-moz-linear-gradient(top,#FBFBFB,#F0F0F0);background:-o-linear-gradient(top,#FBFBFB,#F0F0F0);background:linear-gradient(#FBFBFB,#F0F0F0);padding-left:10px;line-height:1.2em;-webkit-border-radius:0 0 5px 5px;-moz-border-radius:0 0 5px 5px;border-radius:0 0 5px 5px}.uls-menu a{cursor:pointer}.uls-menu.callout .caret-before{border-top:20px solid transparent;border-right:20px solid #AAA;border-bottom:20px solid transparent;display:inline-block;left:-21px;top:30px;position:absolute}.uls-menu.callout .caret-after{border-top:20px solid transparent;border-right:20px solid #FCFCFC;border-bottom:20px solid transparent;display:inline-block;left:-20px;top:30px;position:absolute}#settings-block div.display-settings-block,#settings-block div.input-settings-block{display:inline-block;margin:8px 15px;color:#565656}#settings-block div.display-settings-block:hover,#settings-block div.input-settings-block:hover{color:#252525}.uls-ui-languages button{width:23%;text-overflow:ellipsis;margin-right:4%}button.uls-more-languages{width:auto}.settings-title{font-size:11pt}.settings-text{color:#555555;font-size:9pt}div.display-settings-block:hover .settings-text{color:#252525} .ime-perime-help{display:none}.ime-checked .ime-perime-help{display:inline-block;width:20px;height:100%;position:absolute;top:0;bottom:0;right:0;opacity:0.75;padding:0;background:transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAMAAABhEH5lAAAAA3NCSVQICAjb4U/gAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAFdQTFRF////AAAAZmZmVVVVSUlJW1tbVVVVV1dXWFhYVVVVV1dXVlZWWFhYV1dXWFhYVlZWV1dXVlZWV1dXV1dXWFhYV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXrNxhuAAAABx0Uk5TAAEFBgcOJCkxNlVla3KDi5WrsrbJ09ny9vf9/uWqFuIAAACESURBVBjTdZDBDsIgEERHai2KUqmllfr+/zs9AFYTnMsmL7uTmZX+yVjnrPkCnU8AyXeVDJGiOJSdCLzmsAIx73ngeZKOC+AlySSA8LjrCiQjyRafmzyAleQymQ7nFcDt6NItVFQOp5Cn/dgzjlDts+vW9xs1RI7KPLNHbRRq1W4951dvPF4RAFiSul8AAAAASUVORK5CYII=) left center no-repeat;background:transparent url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/resources/css/../images/help.png?2013-10-31T16:08:20Z) left center no-repeat!ie;background-image:-webkit-linear-gradient(transparent,transparent),url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgIHhtbG5zOmNjPSJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9ucyMiCiAgIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB2ZXJzaW9uPSIxLjEiCiAgIHdpZHRoPSIxOCIKICAgaGVpZ2h0PSIxOCIKICAgdmlld0JveD0iMCAwIDE4IDE4LjAwMDAwMSIKICAgaWQ9IkxheWVyXzEiCiAgIHhtbDpzcGFjZT0icHJlc2VydmUiPjxtZXRhZGF0YQogICBpZD0ibWV0YWRhdGE5Ij48cmRmOlJERj48Y2M6V29yawogICAgICAgcmRmOmFib3V0PSIiPjxkYzpmb3JtYXQ+aW1hZ2Uvc3ZnK3htbDwvZGM6Zm9ybWF0PjxkYzp0eXBlCiAgICAgICAgIHJkZjpyZXNvdXJjZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlL1N0aWxsSW1hZ2UiIC8+PGRjOnRpdGxlPjwvZGM6dGl0bGU+PC9jYzpXb3JrPjwvcmRmOlJERj48L21ldGFkYXRhPjxkZWZzCiAgIGlkPSJkZWZzNyIgLz4KPHBhdGgKICAgZD0ibSA5LjAwMDAwMDMsMS40OTk2NDM3IGMgLTQuMTQxNDE5MSwwIC03LjUwMDAwMDQsMy4zNTc4NjkgLTcuNTAwMDAwNCw3LjUwMDAwMTQgMCw0LjE0MjEzMDkgMy4zNTg1ODEzLDcuNTAwNzExOSA3LjUwMDAwMDQsNy41MDA3MTE5IEMgMTMuMTQyODQ0LDE2LjUwMDM1NyAxNi41LDEzLjE0MTc3NiAxNi41LDguOTk5NjQ1MSAxNi41LDQuODU3NTEyNyAxMy4xNDM1NTYsMS40OTk2NDM3IDkuMDAwMDAwMywxLjQ5OTY0MzcgeiBtIC0wLjAwMTQyLDExLjk0MzQ0MjMgYyAtMC42MTMzMDYyLDAgLTEuMDY3MDUzLC0wLjQ5MDA3NCAtMS4wNjcwNTMsLTEuMDc5ODc0IDAsLTAuNjE0MDE4IDAuNDUzNzQ2OCwtMS4wOTI2OTcgMS4wNjcwNTMsLTEuMDkyNjk3IDAuNTg5Nzk5NSwwIDEuMDY4NDc4NywwLjQ3ODY3OSAxLjA2ODQ3ODcsMS4wOTI2OTcgMCwwLjU4OTA4NyAtMC40Nzg2NzkyLDEuMDc5ODc0IC0xLjA2ODQ3ODcsMS4wNzk4NzQgeiBNIDEwLjUyMDgwOCw4LjgwNDQ3MDIgQyAxMC4wMDU4MDMsOS4yMDkwNjY4IDkuODA4NDg5Myw5LjQ2NzYzODQgOS44MDg0ODkzLDEwLjA0MzE5MSBWIDEwLjM5OTM1IEggOC4yMzc4MTk1IFYgOS45Njk4MjI2IGMgMCwtMS4wODA1ODY2IDAuMzE5ODMxLC0xLjUyMTUxMyAwLjgyMjAxNTgsLTEuOTE0NzEzIDAuNTAzNjA5MywtMC4zOTMxOTkxIDAuODExMzMwNiwtMC42MDE5MDkxIDAuODExMzMwNiwtMS4xNjYwNjQ4IDAsLTAuNDc4Njc4MSAtMC4yOTQ5LC0wLjc0ODY0NjcgLTAuODgzMjc0OCwtMC43NDg2NDY3IC0wLjUwMzYwOTQsMCAtMC45NDU5NTkxLDAuMTM0NjI4MSAtMS40MTE4MTUzLDAuNDU0NDU5MiBMIDYuODI3NDI5MSw1LjMwNzY5NzggQyA3LjQ0MDczNTMsNC44Nzc0NTc1IDguMjAyMjAzNiw0LjU3MTE2MDcgOS4yMDc5OTY5LDQuNTcxMTYwNyBjIDEuMzYxOTUzMSwwIDIuNTA0NTEyMSwwLjc0ODY0NjUgMi41MDQ1MTIxLDIuMTgzOTY4MiAtNy4xMmUtNCwxLjAxODYxNDkgLTAuNTY1NTgsMS41NTg1NTI1IC0xLjE5MTcwOSwyLjA0OTM0MTMgeiIKICAgaWQ9InBhdGgzIgogICBzdHlsZT0iZmlsbDojNTc1NzU3IiAvPgo8L3N2Zz4=);background-image:-webkit-linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/resources/css/../images/help.svg?2013-10-31T16:08:20Z)!ie;background-image:linear-gradient(transparent,transparent),url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgIHhtbG5zOmNjPSJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9ucyMiCiAgIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB2ZXJzaW9uPSIxLjEiCiAgIHdpZHRoPSIxOCIKICAgaGVpZ2h0PSIxOCIKICAgdmlld0JveD0iMCAwIDE4IDE4LjAwMDAwMSIKICAgaWQ9IkxheWVyXzEiCiAgIHhtbDpzcGFjZT0icHJlc2VydmUiPjxtZXRhZGF0YQogICBpZD0ibWV0YWRhdGE5Ij48cmRmOlJERj48Y2M6V29yawogICAgICAgcmRmOmFib3V0PSIiPjxkYzpmb3JtYXQ+aW1hZ2Uvc3ZnK3htbDwvZGM6Zm9ybWF0PjxkYzp0eXBlCiAgICAgICAgIHJkZjpyZXNvdXJjZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlL1N0aWxsSW1hZ2UiIC8+PGRjOnRpdGxlPjwvZGM6dGl0bGU+PC9jYzpXb3JrPjwvcmRmOlJERj48L21ldGFkYXRhPjxkZWZzCiAgIGlkPSJkZWZzNyIgLz4KPHBhdGgKICAgZD0ibSA5LjAwMDAwMDMsMS40OTk2NDM3IGMgLTQuMTQxNDE5MSwwIC03LjUwMDAwMDQsMy4zNTc4NjkgLTcuNTAwMDAwNCw3LjUwMDAwMTQgMCw0LjE0MjEzMDkgMy4zNTg1ODEzLDcuNTAwNzExOSA3LjUwMDAwMDQsNy41MDA3MTE5IEMgMTMuMTQyODQ0LDE2LjUwMDM1NyAxNi41LDEzLjE0MTc3NiAxNi41LDguOTk5NjQ1MSAxNi41LDQuODU3NTEyNyAxMy4xNDM1NTYsMS40OTk2NDM3IDkuMDAwMDAwMywxLjQ5OTY0MzcgeiBtIC0wLjAwMTQyLDExLjk0MzQ0MjMgYyAtMC42MTMzMDYyLDAgLTEuMDY3MDUzLC0wLjQ5MDA3NCAtMS4wNjcwNTMsLTEuMDc5ODc0IDAsLTAuNjE0MDE4IDAuNDUzNzQ2OCwtMS4wOTI2OTcgMS4wNjcwNTMsLTEuMDkyNjk3IDAuNTg5Nzk5NSwwIDEuMDY4NDc4NywwLjQ3ODY3OSAxLjA2ODQ3ODcsMS4wOTI2OTcgMCwwLjU4OTA4NyAtMC40Nzg2NzkyLDEuMDc5ODc0IC0xLjA2ODQ3ODcsMS4wNzk4NzQgeiBNIDEwLjUyMDgwOCw4LjgwNDQ3MDIgQyAxMC4wMDU4MDMsOS4yMDkwNjY4IDkuODA4NDg5Myw5LjQ2NzYzODQgOS44MDg0ODkzLDEwLjA0MzE5MSBWIDEwLjM5OTM1IEggOC4yMzc4MTk1IFYgOS45Njk4MjI2IGMgMCwtMS4wODA1ODY2IDAuMzE5ODMxLC0xLjUyMTUxMyAwLjgyMjAxNTgsLTEuOTE0NzEzIDAuNTAzNjA5MywtMC4zOTMxOTkxIDAuODExMzMwNiwtMC42MDE5MDkxIDAuODExMzMwNiwtMS4xNjYwNjQ4IDAsLTAuNDc4Njc4MSAtMC4yOTQ5LC0wLjc0ODY0NjcgLTAuODgzMjc0OCwtMC43NDg2NDY3IC0wLjUwMzYwOTQsMCAtMC45NDU5NTkxLDAuMTM0NjI4MSAtMS40MTE4MTUzLDAuNDU0NDU5MiBMIDYuODI3NDI5MSw1LjMwNzY5NzggQyA3LjQ0MDczNTMsNC44Nzc0NTc1IDguMjAyMjAzNiw0LjU3MTE2MDcgOS4yMDc5OTY5LDQuNTcxMTYwNyBjIDEuMzYxOTUzMSwwIDIuNTA0NTEyMSwwLjc0ODY0NjUgMi41MDQ1MTIxLDIuMTgzOTY4MiAtNy4xMmUtNCwxLjAxODYxNDkgLTAuNTY1NTgsMS41NTg1NTI1IC0xLjE5MTcwOSwyLjA0OTM0MTMgeiIKICAgaWQ9InBhdGgzIgogICBzdHlsZT0iZmlsbDojNTc1NzU3IiAvPgo8L3N2Zz4=);background-image:linear-gradient(transparent,transparent),url(//bits.wikimedia.org/static-1.23wmf2/extensions/UniversalLanguageSelector/resources/css/../images/help.svg?2013-10-31T16:08:20Z)!ie}.ime-checked .ime-perime-help:hover{opacity:1}button.button{display:inline-block;padding:0.4065em 1.2195em 0.4065em;font-size:0.813em;font-weight:bold;line-height:1;color:#252525;text-align:center;text-shadow:0 1px 1px rgba(255,255,255,0.75);cursor:pointer;background-color:#e6e6e6;background-image:-moz-linear-gradient(top,#f0f0f0,#e6e6e6);background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#f0f0f0),color-stop(100%,#e6e6e6));background-image:-webkit-linear-gradient(top,#f0f0f0,#e6e6e6);background-image:linear-gradient(#f0f0f0,#e6e6e6);border:1px #c9c9c9 solid;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr='#f0f0f0',endColorstr='#e6e6e6',GradientType=0)";filter:progid:dximagetransform.microsoft.gradient(startColorstr='#f0f0f0',endColorstr='#e6e6e6',GradientType=0)}button.button:hover{background-color:#f0f0f0;background-image:-moz-linear-gradient(top,#f8f8f8,#f0f0f0);background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#f8f8f8),color-stop(100%,#f0f0f0));background-image:-webkit-linear-gradient(top,#f8f8f8,#f0f0f0);background-image:linear-gradient(#f8f8f8,#f0f0f0);border-color:#c9c9c9;-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr='#f8f8f8',endColorstr='#f0f0f0',GradientType=0)";filter:progid:dximagetransform.microsoft.gradient(startColorstr='#f8f8f8',endColorstr='#f0f0f0',GradientType=0)}button.button:active,button.button.down{background-color:#d8d8d8;background-image:-moz-linear-gradient(top,#d3d3d3,#d8d8d8);background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#d3d3d3),color-stop(100%,#d8d8d8));background-image:-webkit-linear-gradient(top,#d3d3d3,#d8d8d8);background-image:linear-gradient(#d3d3d3,#d8d8d8);border-color:#c9c9c9;-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr='#d3d3d3',endColorstr='#d8d8d8',GradientType=0)";filter:progid:dximagetransform.microsoft.gradient(startColorstr='#d3d3d3',endColorstr='#d8d8d8',GradientType=0)}button.button:disabled,button.button:disabled.hover,button.button.disabled,button.button.disabled:hover{color:#c9c9c9;cursor:default;background-color:#f0f0f0;background-image:-moz-linear-gradient(top,#f0f0f0,#f0f0f0);background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#f0f0f0),color-stop(100%,#f0f0f0));background-image:-webkit-linear-gradient(top,#f0f0f0,#f0f0f0);background-image:linear-gradient(#f0f0f0,#f0f0f0);border-color:#e3e3e3;-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr='#f0f0f0',endColorstr='#f0f0f0',GradientType=0)";filter:progid:dximagetransform.microsoft.gradient(startColorstr='#f0f0f0',endColorstr='#f0f0f0',GradientType=0)}button.button.blue{color:#ffffff;text-shadow:0 -1px 0 rgba(0,0,0,0.25);background-color:#3366bb;background-image:-moz-linear-gradient(top,#3670c8,#3366bb);background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#3670c8),color-stop(100%,#3366bb));background-image:-webkit-linear-gradient(top,#3670c8,#3366bb);background-image:linear-gradient(#3670c8,#3366bb);border:1px #33589f solid;-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr='#3670c8',endColorstr='#3366bb',GradientType=0)";filter:progid:dximagetransform.microsoft.gradient(startColorstr='#3670c8',endColorstr='#3366bb',GradientType=0)}button.button.blue:hover{background-color:#3f77d7;background-image:-moz-linear-gradient(top,#4c84da,#3f77d7);background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#4c84da),color-stop(100%,#3f77d7));background-image:-webkit-linear-gradient(top,#4c84da,#3f77d7);background-image:linear-gradient(#4c84da,#3f77d7);-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr='#4c84da',endColorstr='#3f77d7',GradientType=0)";filter:progid:dximagetransform.microsoft.gradient(startColorstr='#4c84da',endColorstr='#3f77d7',GradientType=0)}button.button.blue:active{background-color:#2a549c;background-image:-moz-linear-gradient(top,#2d5ea9,#2a549c);background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#2d5ea9),color-stop(100%,#2a549c));background-image:-webkit-linear-gradient(top,#2d5ea9,#2a549c);background-image:linear-gradient(#2d5ea9,#2a549c);-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr='#2d5ea9',endColorstr='#2a549c',GradientType=0)";filter:progid:dximagetransform.microsoft.gradient(startColorstr='#2d5ea9',endColorstr='#2a549c',GradientType=0)}button.button.blue:disabled,button.button.blue:disabled.hover,button.button.blue.disabled,button.button.blue.disabled:hover{color:white;text-shadow:none;cursor:default;background-color:#7297d7;background-image:-moz-linear-gradient(top,#7297d7,#7297d7);background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#7297d7),color-stop(100%,#7297d7));background-image:-webkit-linear-gradient(top,#7297d7,#7297d7);background-image:linear-gradient(#7297d7,#7297d7);border-color:#5e89d1;-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr='#7297d7',endColorstr='#7297d7',GradientType=0)";filter:progid:dximagetransform.microsoft.gradient(startColorstr='#7297d7',endColorstr='#7297d7',GradientType=0)}button.button.green{color:#ffffff;text-shadow:0 -1px 0 rgba(0,0,0,0.25);background-color:#008740;background-image:-moz-linear-gradient(top,#00974b,#008740);background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#00974b),color-stop(100%,#008740));background-image:-webkit-linear-gradient(top,#00974b,#008740);background-image:linear-gradient(#00974b,#008740);border:1px #0f9b3b solid;-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr='#00974b',endColorstr='#008740',GradientType=0)";filter:progid:dximagetransform.microsoft.gradient(startColorstr='#00974b',endColorstr='#008740',GradientType=0)}button.button.green:hover{background-color:#119750;background-image:-moz-linear-gradient(top,#10a65b,#119750);background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#10a65b),color-stop(100%,#119750));background-image:-webkit-linear-gradient(top,#10a65b,#119750);background-image:linear-gradient(#10a65b,#119750);-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr='#10a65b',endColorstr='#119750',GradientType=0)";filter:progid:dximagetransform.microsoft.gradient(startColorstr='#10a65b',endColorstr='#119750',GradientType=0)}button.button.green:active{background-color:#007236;background-image:-moz-linear-gradient(top,#007236,#007236);background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#007236),color-stop(100%,#007236));background-image:-webkit-linear-gradient(top,#007236,#007236);background-image:linear-gradient(#007236,#007236);-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr='#007236',endColorstr='#007236',GradientType=0)";filter:progid:dximagetransform.microsoft.gradient(startColorstr='#007236',endColorstr='#007236',GradientType=0)}button.button.green:disabled,button.button.green:disabled.hover,button.button.green.disabled,button.button.green.disabled:hover{color:white;text-shadow:none;cursor:default;background-color:#2ca368;background-image:-moz-linear-gradient(top,#2ca368,#2ca368);background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#2ca368),color-stop(100%,#2ca368));background-image:-webkit-linear-gradient(top,#2ca368,#2ca368);background-image:linear-gradient(#2ca368,#2ca368);border-color:#278f5b;-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr='#2ca368',endColorstr='#2ca368',GradientType=0)";filter:progid:dximagetransform.microsoft.gradient(startColorstr='#2ca368',endColorstr='#2ca368',GradientType=0)} #p-lang ul{font-family:'Autonym',sans-serif}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:445a094c2e4b1b29d745c8faf51195df */
+.wbc-editpage{list-style:none none;text-align:right;padding-right:.5em !important}.wbc-editpage > a{padding-left:11px;background:no-repeat left center}.wbc-editpage > a:link,.wbc-editpage > a:visited{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKBAMAAAB/HNKOAAAAD1BMVEUZAAD///95eXmqqqrY2NjEIQ0cAAAAAXRSTlMAQObYZgAAACdJREFUCNdjYGBgYGIAASUFENNJCUiqmADZTM5OqExFFZAKRSG4YgBjcwODynSgDwAAAABJRU5ErkJggg==);background-image:url(//bits.wikimedia.org/static-1.23wmf2/extensions/Wikibase/client/resources/images/WBC-Asset-Pencil.png?2013-10-31T16:10:00Z)!ie;color:#797979 !important}.wbc-editpage > a:hover{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKBAMAAAB/HNKOAAAAD1BMVEWBAADY2Nj///8GRa0zZrtW2AECAAAAAXRSTlMAQObYZgAAACdJREFUCNdjYGBgYGYAAWMDEFPYGEgaOgLZzCLCqEwjQ5AKI2W4YgBg5QOTQPzBuAAAAABJRU5ErkJggg==);background-image:url(//bits.wikimedia.org/static-1.23wmf2/extensions/Wikibase/client/resources/images/WBC-Asset-Pencil-Hover.png?2013-10-31T16:10:00Z)!ie;color:#0645AD !important}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:94b38fdfb51a3afe6a935c14b1355d5d */</style><style>
+.cite-accessibility-label{position:absolute !important; top:-99999px;clip:rect(1px 1px 1px 1px); clip:rect(1px,1px,1px,1px);padding:0 !important;border:0 !important;height:1px !important;width:1px !important;overflow:hidden}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:6989008023386f50501783f5c5ff5345 */
+.referencetooltip{position:absolute;list-style:none;list-style-image:none;opacity:0;font-size:10px;margin:0;z-index:5;padding:0}.referencetooltip li{border:#080086 2px solid;max-width:260px;padding:10px 8px 13px 8px;margin:0px;background-color:#F7F7F7;box-shadow:2px 4px 2px rgba(0,0,0,0.3);-moz-box-shadow:2px 4px 2px rgba(0,0,0,0.3);-webkit-box-shadow:2px 4px 2px rgba(0,0,0,0.3)}.referencetooltip li+li{margin-left:7px;margin-top:-2px;border:0;padding:0;height:3px;width:0px;background-color:transparent;box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none;border-top:12px #080086 solid;border-right:7px transparent solid;border-left:7px transparent solid}.referencetooltip>li+li::after{content:'';border-top:8px #F7F7F7 solid;border-right:5px transparent solid;border-left:5px transparent solid;margin-top:-12px;margin-left:-5px;z-index:1;height:0px;width:0px;display:block}.client-js body .referencetooltip li li{border:none;box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none;height:auto;width:auto;margin:auto;padding:0;position:static}.RTflipped{padding-top:13px}.referencetooltip.RTflipped li+li{position:absolute;top:2px;border-top:0;border-bottom:12px #080086 solid}.referencetooltip.RTflipped li+li::after{border-top:0;border-bottom:8px #F7F7F7 solid;position:absolute;margin-top:7px}.RTsettings{float:right;height:16px;width:16px;cursor:pointer;background-image:url(//upload.wikimedia.org/wikipedia/commons/e/ed/Cog.png);margin-top:-9px;margin-right:-7px;-webkit-transition:opacity 0.15s;-moz-transition:opacity 0.15s;-o-transition:opacity 0.15s;-ms-transition:opacity 0.15s;transition:opacity 0.15s;opacity:0.6;filter:alpha(opacity=60)}.RTsettings:hover{opacity:1;filter:alpha(opacity=100)}.RTTarget{border:#080086 2px solid}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:3c614aa75cecefe56b27b5e3c9197b7e */
+div#editpage-specialchars{display:block;margin-top:.5em;border:1px solid #c0c0c0;padding:.3em}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:29386c84f9c8f19dfb410df7e5be154b */
+.wp-teahouse-question-form{position:absolute;margin-left:auto;margin-right:auto;background-color:#f4f3f0;border:1px solid #a7d7f9;padding:1em}#wp-th-question-ask{float:right}.wp-teahouse-ask a.external{background-image:none !important}.wp-teahouse-respond-form{position:absolute;margin-left:auto;margin-right:auto;background-color:#f4f3f0;border:1px solid #a7d7f9;padding:1em}.wp-th-respond{float:right}.wp-teahouse-respond a.external{background-image:none !important}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:ba4e3603af357b5172e85672664d39a8 */
+.mw-collapsible-toggle{float:right} li .mw-collapsible-toggle{float:none} .mw-collapsible-toggle-li{list-style:none}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:4250852ed2349a0d4d0fc6509a3e7d4c */
+.suggestions{overflow:hidden;position:absolute;top:0;left:0;width:0;border:none;z-index:1099;padding:0;margin:-1px -1px 0 0} html > body .suggestions{margin:-1px 0 0 0}.suggestions-special{position:relative;background-color:white;cursor:pointer;border:solid 1px #aaaaaa;padding:0;margin:0;margin-top:-2px;display:none;padding:0.25em 0.25em;line-height:1.25em}.suggestions-results{background-color:white;cursor:pointer;border:solid 1px #aaaaaa;padding:0;margin:0}.suggestions-result{color:black;margin:0;line-height:1.5em;padding:0.01em 0.25em;text-align:left}.suggestions-result-current{background-color:#4C59A6;color:white}.suggestions-special .special-label{color:gray;text-align:left}.suggestions-special .special-query{color:black;font-style:italic;text-align:left}.suggestions-special .special-hover{background-color:silver}.suggestions-result-current .special-label,.suggestions-result-current .special-query{color:white}.autoellipsis-matched,.highlight{font-weight:bold}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:9780324491b653a3780e2d029bdc140c */
+.postedit-container{margin:0 auto;position:fixed;top:0;height:0;left:50%;z-index:1000;font-size:13px}.postedit-container:hover{cursor:pointer}.postedit{position:relative;top:0.6em;left:-50%;padding:.6em 3.6em .6em 1.1em;line-height:1.5625em;color:#626465;background-color:#f4f4f4;border:1px solid #dcd9d9;text-shadow:0 0.0625em 0 rgba(255,255,255,0.5);border-radius:5px;-webkit-box-shadow:0 2px 5px 0 #ccc;box-shadow:0 2px 5px 0 #ccc;-webkit-transition:all 0.25s ease-in-out;-moz-transition:all 0.25s ease-in-out;-ms-transition:all 0.25s ease-in-out;-o-transition:all 0.25s ease-in-out;transition:all 0.25s ease-in-out}.skin-monobook .postedit{top:6em !important}.postedit-faded{opacity:0}.postedit-icon{padding-left:41px;  line-height:25px;background-repeat:no-repeat;background-position:8px 50%}.postedit-icon-checkmark{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAABblBMVEUAAAD///////9PfTf///80aRdTgjn///9Feij///////////9Rfzf///////////9PfjZRgDh1o1xOfTb///////+bwYqLtnj///////9PfTa82K////9WhT6YxIL///9QgDdTgzr////////j7uDl7eLq8efi693k7OH///////9UhjuBr2rp9uRUhjr///9YljVKgir///9WiTlYjT3////9/v57vFlbkT5PjC9dlD/5/fhuq09stUTs9uhxuElctCpfnT1huDFloEZloUZmpENmvDZpvDxpvTxqvjxrvT5rvT9rwTxsqktswD5uwkBvuUdxw0NztFBztU9ztVBzwkp0tlJ1xkd2t1R3uVR4w1F4xk54x014yE15uVZ5v1R5xVB6v1R7yFJ8wVh9xVl9yFR9yVd9ylN+xVh+yFd/x1l/yFeAylmEx1+Ny2uY0Hqe04Wj1Ymv3Ze33qLD47TJ5L3O6cPU7Mrq9eb2+/Q4j37OAAAAQHRSTlMAAQIEBAUFBQwPFB4fJCUoKiosQEhJS01RUlZZXmdydXaChYuSlJSWmJmoq6uur8LExcvM19fg5ejt8fX2+Pr7SljgewAAAKpJREFUGBkFwQNCAwAAAMDLtl3LtrG4rWXbtvX77gAgZ6grFwC0bhwNVgKgdPZx8b0dgLi+s7Wn0VoAqpfOI9+BNADZI7fLrz2pSEwGHZuH+78lSK8ZLkLezF3ooyUG3VPXq2USei9WngeyoG195yBYWDF3E/2pAhl1e9Gr8bGT+bfOFCC2fnvh4X7rcqIAQNNu+HT6sxkAjceTL/2ZAIhv+PorBwBJxfkA//dFHSCBy/UTAAAAAElFTkSuQmCC);background-image:url(//bits.wikimedia.org/static-1.23wmf2/resources/mediawiki.action/images/green-checkmark.png?2013-10-31T16:01:40Z)!ie;background-position:left}.postedit-close{position:absolute;padding:0 .8em;right:0;top:0;font-size:1.25em;font-weight:bold;line-height:2.3em;color:black;text-shadow:0 0.0625em 0 white;text-decoration:none;opacity:0.2;filter:alpha(opacity=20)}.postedit-close:hover{color:black;text-decoration:none;opacity:0.4;filter:alpha(opacity=40)}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:0150622c324dabbbec5e26dfdf761e14 */
+#container{position:relative;min-height:100%}#container,video{width:100%;height:100%}#playerContainer{overflow:hidden;position:relative;height:100%;background:#000}#videoHolder{position:relative;overflow:hidden}.fullscreen #playerContainer{position:absolute !important;width:100% !important;height:100%! important;z-index:9999;min-height:100%;top:0;left:0;margin:0}.mwEmbedPlayer{width:100%;height:100%;overflow:hidden;position:absolute;top:0;left:0}.modal_editor{ left:10px;top:10px;right:10px;bottom:10px;position:fixed;z-index:100}.displayHTML a:visited{color:white}.loadingSpinner{width:32px;height:32px;display:block;padding:0px;background-image:url(//bits.wikimedia.org/static-1.23wmf2/extensions/MwEmbedSupport/MwEmbedModules/MwEmbedSupport/skins/common/images/loading_ani.gif?2013-10-31T16:05:00Z)}.mw-imported-resource{border:thin solid black}.kaltura-icon{background-image:url(//bits.wikimedia.org/static-1.23wmf2/extensions/MwEmbedSupport/MwEmbedModules/MwEmbedSupport/skins/common/images/kaltura_logo_sm_transparent.png?2013-10-31T16:05:00Z) !important;background-repeat:no-repeat;display:block;height:12px;width:12px;margin-top:2px !important;margin-left:3px !important}.mw-fullscreen-overlay{background:rgb(0,0,0) none repeat scroll 0% 0%;position:fixed;top:0pt;left:0pt;width:100%;height:100%;-moz-background-clip:border;-moz-background-origin:padding;-moz-background-inline-policy:continuous} .play-btn-large{width:70px;height:53px;background :url(//bits.wikimedia.org/static-1.23wmf2/extensions/MwEmbedSupport/MwEmbedModules/MwEmbedSupport/skins/common/images/player_big_play_button.png?2013-10-31T16:05:00Z);position :absolute;cursor :pointer;border :none !important;z-index :1}.play-btn-large:hover{background :url(//bits.wikimedia.org/static-1.23wmf2/extensions/MwEmbedSupport/MwEmbedModules/MwEmbedSupport/skins/common/images/player_big_play_button_hover.png?2013-10-31T16:05:00Z)}.carouselContainer{position :absolute;width :100%;z-index :2}.carouselVideoTitle{position :absolute;top :0px;left :0px;width :100%;background :rgba(0,0,0,0.8);color :white;font-size :small;font-weight :bold;z-index :2}.carouselVideoTitleText{display :block;padding :10px 10px 10px 20px}.carouselTitleDuration{position :absolute;top :0px;right :0px;padding :2px;background-color :#5A5A5A;color :#D9D9D9;font-size :smaller;z-index :2}.carouselImgTitle{position :absolute;width :100%;text-align :center;color :white;font-size :small;background :rgba(0,0,0,0.4)}.carouselImgDuration{position :absolute;top :2px;left :2px;background :rgba( 0,0,0,0.7 );color :white;padding :1px 6px;font-size :small}.carouselPrevButton,.carouselNextButton{display :block;position :absolute;bottom:23px}.carouselPrevButton{left :5px}.carouselNextButton{right:6px}.alert-container{-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;background-image:linear-gradient(bottom,rgb(215,215,215) 4%,rgb(230,230,230) 55%,rgb(255,255,255) 100%);background-image:-o-linear-gradient(bottom,rgb(215,215,215) 4%,rgb(230,230,230) 55%,rgb(255,255,255) 100%);background-image:-moz-linear-gradient(bottom,rgb(215,215,215) 4%,rgb(230,230,230) 55%,rgb(255,255,255) 100%);background-image:-webkit-linear-gradient(bottom,rgb(215,215,215) 4%,rgb(230,230,230) 55%,rgb(255,255,255) 100%);background-image:-ms-linear-gradient(bottom,rgb(215,215,215) 4%,rgb(230,230,230) 55%,rgb(255,255,255) 100%);background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0.04,rgb(215,215,215)),color-stop(0.55,rgb(230,230,230)),color-stop(1,rgb(255,255,255)));margin:auto;position:absolute;top:0;left:0;right:0;bottom:0;max-width:80%;max-height:30%}.alert-title{background-color :#E6E6E6;padding :5px;border-bottom :1px solid #D1D1D1;font-weight :normal !important;font-size:14px !important;-webkit-border-top-left-radius:3px;-moz-border-radius-topleft:3px;border-top-left-radius:3px;-webkit-border-top-right-radius:3px;-moz-border-radius-topright:3px;border-top-right-radius:3px }.alert-message{padding :5px;font-weight :normal !important;text-align:center;font-size:14px !important}.alert-buttons-container{text-align:center;padding-bottom:5px}.alert-button{background-color:#474747;color:white;-webkit-border-radius:.5em;-moz-border-radius:.5em;border-radius:.5em;padding:2px 10px;background-image:linear-gradient(bottom,rgb(25,25,25) 4%,rgb(47,47,47) 55%,rgb(71,71,71) 68%);background-image:-o-linear-gradient(bottom,rgb(25,25,25) 4%,rgb(47,47,47) 55%,rgb(71,71,71) 68%);background-image:-moz-linear-gradient(bottom,rgb(25,25,25) 4%,rgb(47,47,47) 55%,rgb(71,71,71) 68%);background-image:-webkit-linear-gradient(bottom,rgb(25,25,25) 4%,rgb(47,47,47) 55%,rgb(71,71,71) 68%);background-image:-ms-linear-gradient(bottom,rgb(25,25,25) 4%,rgb(47,47,47) 55%,rgb(71,71,71) 68%);background-image:-webkit-gradient( linear,left bottom,left top,color-stop(0.04,rgb(25,25,25)),color-stop(0.55,rgb(47,47,47)),color-stop(0.68,rgb(71,71,71)) )}.alert-text{color :black !important}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:4034a076faafe7628541193b7fa98f0c */
+.PopUpMediaTransform a .play-btn-large{position :absolute;top:50%;left :50%;width:70px;height:53px;margin-left:-35px;margin-top:-25px;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAAA1CAMAAADLRm3ZAAABnlBMVEUAAAAAAAAAAABaWlp4eHh7e3t/f393d3eDg4N0dHRtbW2FhYVra2uJiYmNjY1nZ2eRkZFkZGSUlJRiYmKYmJhgYGCcnJxeXl5cXFyfn58AAACioqKlpaWsrKwAAACpqakAAAAAAAAAAAAAAABEREQFBQUHBwdMTEwAAAAYGBgAAAAAAAABAQEXFxcAAAAAAAAAAABxcXGoqKh3d3eampp8fHyIiIgUFBQcHBw0NDSFhYV+fn5FRUUmJiaNjY11dXWPj4+Hh4c9PT14eHifn59nZ2eBgYFISEiBgYFubm5vb28ODg4lJSVra2tiYmJoaGgEBAQmJiZmZmaLi4saGhpiYmKYmJhZWVlgYGBfX19vb29DQ0MGBgZcXFyBgYFKSkoPDw9ZWVlzc3NQUFBXV1eKiopUVFQdHR1VVVUQEBBYWFglJSVTU1NXV1cKCgosLCySkpJRUVFISEgyMjJPT08dHR2GhoY4ODhNTU09PT0MDAwuLi57e3sTExNJSUkgICBOTk4hISEbGxtTU1MoKChBQUEsLCxXV1cAAABycnIdNM6eAAAAinRSTlOzj6jO1dbX1NfU09nS2drR29Hc0N3Q3c/O3gDf3+Ce4EgIGW7HtbXKnLouq7S5cHIq1ODQ3NTXuLq/1tXEvNjT2NjC093N18bW0dC2vNHM0LW90Ne5z9rLzsrTxbXN1Me3zdDKzdfLu8y3zb3Lyba/2svFwcq618PKxLa/1LjJu8q8u8y+xsDKrdJqj5XQAAABYklEQVR4Xu3XVVNCQRjH4VdQEbvFVRAOIRl2d3d3d3d317d2GEaGOOfM1oUXPB/gN7NX/30BIYPeGMPAqDcgBMhrBUZWLwJBAcwcAriBAzfogAMdKIADBUUmmqm64JAxl2m1k/XMmZkin+YaxsxYqd9iA1OmsfDPajVDZqMgoL1jhzpTmR+k/OCQMlObG+L4dJgq050d5rKVJlOXGaHijjxzny6i94k005YqatBFlmlKEdfy1UeS+UmS0tllwc/0JEhT9WNnBuJlqCy4maE4OSO4mdFYOeO4mQm1jCnAzUyXSJqdm8fOLCRKWVomWIaVZHFrLqJlWE8Ts7lFuAzbGZF294iXYT8rnPLICcSZk5xQyjMzzTKc5wXTXFnoluFaE+TmlnYZipUBpgcA5syjjWU1Tf7I8wvbhr/6Im/vTmDLgO3D9Gn+R5+2aIbXzeABDjwgOIDZtwDIzvwsnR1xujV/AS6zSfMs2bS9AAAAAElFTkSuQmCC);background-image:url(//bits.wikimedia.org/static-1.23wmf2/extensions/TimedMediaHandler/resources/player_big_play_button.png?2013-10-31T16:08:20Z)!ie}.PopUpMediaTransform a .play-btn-large :hover{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAAA1CAMAAADLRm3ZAAABtlBMVEUAAAAAAAAAAAC5ubm1tbWwsLC+vr6Li4vExMSrq6umpqbIyMjOzs6ioqLT09OdnZ3Y2NiZmZnc3NyWlpbh4eGSkpLn5+eQkJCNjY0AAADr6+vv7+/z8/P39/cAAAD9/f0AAAAAAAAAAAAAAAB2dnYAAAAoKCj5+flra2sMDAwAAAAAAAAAAAAAAAAAAAACAgLW1tbPz88wMDCHh4fExMS8vLxKSkpubm6vr6+qqqo0NDQQEBDCwsK1tbUmJiaysrLT09PLy8uIiIgXFxetra2+vr7r6+tycnIbGxvMzMyTk5O1tbU8PDyjo6PR0dG0tLQLCwufn58HBwc9PT2bm5shISEqKiqXl5cICAiJiYmTk5Pj4+OoqKhpaWkKCgqOjo5TU1OXl5cYGBiKioo9PT18fHwlJSWGhoYuLi6CgoIvLy+Dg4Ofn5+oqKg7OzuAgIDk5OSLi4tHR0fIyMh9fX3Z2dlycnJPT08JCQl7e3vJyclhYWFZWVl4eHhhYWEUFBS6urpqamofHx9ycnK2trZzc3N6eno1NTUsLCyKioqAgIBBQUFmZmZHR0cICAjBwcEAAACIiIg+YVJpAAAAknRSTlOzj6jt6+ru4O/p5/Hy5vPl9eT24/ji+eHgAPr7/P2e/hlICG7YLr7+07accipwq7Tw777X6erGzuLjv7fs4rzn8PDYuObr+dK57tjqwuTu6rbjtcPiur3htdvg8+jRtt7H3Lndwdi83b7bwNze5cPb9t/G7drz0Mq22e7MzdjPuOrUu9fo1NnCwN/cxdLItu6t3VahkKcAAAFlSURBVHhe7dfFcgJBFIbRGyLEXegIDBAITtzd3d3d3d3d88ZJigqFzExNyyILzgN8Vb36+wJCGrXWj4JWrUEIkMUElEwWBJwMqNk4sAIDVlACA0qQAQMygowv05fNIDNYplKNFFBnmjN+ZU5SZtrTHHJnqTKVqX8KFykyWSlO9auNxJmmZBebOSWEmZ1EN3v73USZ0ngPxyckmbpYL3n5+JnLaB5FxbiZ20heU+V4mYpwflXVNTiZ2jAhHw1G6Zm1YGEtrZIzbUEiOjqlZrr8xfRIzfQGiOmXmhkIFDEEUjPDIYJGx8YlZyZChdxNYyzDTAS/uXmsZViI4rO0jLkMKzHevtaxl2EjztPWth2wM7sJ7uQHhyTLcJTkSnFqJFuGM4WL8wvSZUiXO11dA1BnbvQ0q2lwRO4f6Db88ekn8vxiB7oM6F8Nb+//6NPmy7C6GczAgBk4G1D75ADpqJ+l1CFGt+Y3XGRJEJqP8KwAAAAASUVORK5CYII=);background-image:url(//bits.wikimedia.org/static-1.23wmf2/extensions/TimedMediaHandler/resources/player_big_play_button_hover.png?2013-10-31T16:08:20Z)!ie}.PopUpMediaTransform{position :relative;display:inline-block}li.gallerybox div.thumb div.PopUpMediaTransform{margin:0 auto}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:27680c2ec5800a09656ccd27c76fb782 */</style><style>
+.suggestions a.mw-searchSuggest-link,.suggestions a.mw-searchSuggest-link:hover,.suggestions a.mw-searchSuggest-link:active,.suggestions a.mw-searchSuggest-link:focus{text-decoration:none;color:black}.suggestions-result-current a.mw-searchSuggest-link,.suggestions-result-current a.mw-searchSuggest-link:hover,.suggestions-result-current a.mw-searchSuggest-link:active,.suggestions-result-current a.mw-searchSuggest-link:focus{color:white}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:52b1797f70c7e4094dfa4191101944e8 */</style><meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/load.css">
+<style>a:lang(ar),a:lang(ckb),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}
+/* cache key: enwiki:resourceloader:filter:minify-css:7:0de201fdea5d684523607ed88007b127 */</style>
+
+<script src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/load_005.php"></script><script src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/load_002.php"></script><style title="spinjs"></style>
+<script>if(window.mw){
+mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Levenshtein_distance","wgTitle":"Levenshtein distance","wgCurRevisionId":579517000,"wgRevisionId":579517000,"wgArticleId":406418,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Articles needing additional references from February 2010","All articles needing additional references","String similarity measures","Dynamic programming","Articles with example pseudocode","Quantitative linguistics"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Levenshtein_distance","wgIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgWikiEditorEnabledModules":{"toolbar":true,"dialogs":true,"hidesig":true,"templateEditor":false,"templates":false,"preview":false,"previewDialog":false,"publish":false,"toc":false},"wgArticleFeedbackv5Permissions":{"aft-reader":true,"aft-member":false,"aft-editor":false,"aft-monitor":false,"aft-administrator":false,"aft-oversighter":false,"aft-noone":false},"wgVisualEditor":{"isPageWatched":false,"magnifyClipIconURL":"//bits.wikimedia.org/static-1.23wmf2/skins/common/images/magnify-clip.png","pageLanguageCode":"en","pageLanguageDir":"ltr"},"wikilove-recipient":"","wikilove-anon":0,"wgGuidedTourHelpGuiderUrl":"Help:Guided tours/guider","wgULSAcceptLanguageList":["en-us","en"],"wgFlaggedRevsParams":{"tags":{"status":{"levels":1,"quality":2,"pristine":3}}},"wgStableRevisionId":null,"wgCategoryTreePageCategoryOptions":"{\"mode\":0,\"hideprefix\":20,\"showcount\":true,\"namespaces\":false}","Geo":{"city":"","country":""},"wgNoticeProject":"wikipedia","aftv5Article":{"id":406418,"title":"Levenshtein distance","namespace":0,"categories":["All articles needing additional references","Articles needing additional references from February 2010","Articles with example pseudocode","Dynamic programming","Quantitative linguistics","String similarity measures"],"permissionLevel":false},"wgWikibaseItemId":"Q496939"});
+}</script><script>if(window.mw){
+mw.loader.implement("user.options",function(){mw.user.options.set({"ccmeonemails":0,"cols":80,"date":"default","diffonly":0,"disablemail":0,"disablesuggest":0,"editfont":"default","editondblclick":0,"editsection":1,"editsectiononrightclick":0,"enotifminoredits":0,"enotifrevealaddr":0,"enotifusertalkpages":1,"enotifwatchlistpages":0,"extendwatchlist":0,"fancysig":0,"forceeditsummary":0,"gender":"unknown","hideminor":0,"hidepatrolled":0,"imagesize":2,"justify":0,"math":0,"minordefault":0,"newpageshidepatrolled":0,"nocache":0,"noconvertlink":0,"norollbackdiff":0,"numberheadings":0,"previewonfirst":0,"previewontop":1,"rcdays":7,"rclimit":50,"rememberpassword":0,"rows":25,"searchlimit":20,"showhiddencats":false,"shownumberswatching":1,"showtoc":1,"showtoolbar":1,"skin":"vector","stubthreshold":0,"thumbsize":4,"underline":2,"uselivepreview":0,"usenewrc":0,"vector-simplesearch":1,"watchcreations":1,"watchdefault":0,"watchdeletion":0,"watchlistdays":3,"watchlisthideanons":0,"watchlisthidebots"
+:0,"watchlisthideliu":0,"watchlisthideminor":0,"watchlisthideown":0,"watchlisthidepatrolled":0,"watchmoves":0,"wllimit":250,"useeditwarning":1,"prefershttps":1,"flaggedrevssimpleui":1,"flaggedrevsstable":0,"flaggedrevseditdiffs":true,"flaggedrevsviewdiffs":false,"usebetatoolbar":1,"usebetatoolbar-cgd":1,"aftv5-last-filter":null,"visualeditor-enable":0,"visualeditor-enable-experimental":0,"visualeditor-enable-mwmath":0,"visualeditor-betatempdisable":0,"wikilove-enabled":1,"echo-subscriptions-web-page-review":true,"echo-subscriptions-email-page-review":false,"ep_showtoplink":false,"ep_bulkdelorgs":false,"ep_bulkdelcourses":true,"ep_showdyk":true,"echo-notify-show-link":true,"echo-show-alert":true,"echo-email-frequency":0,"echo-email-format":"html","echo-subscriptions-email-system":true,"echo-subscriptions-web-system":true,"echo-subscriptions-email-other":false,"echo-subscriptions-web-other":true,"echo-subscriptions-email-edit-user-talk":false,"echo-subscriptions-web-edit-user-talk":true,
+"echo-subscriptions-email-reverted":false,"echo-subscriptions-web-reverted":true,"echo-subscriptions-email-article-linked":false,"echo-subscriptions-web-article-linked":false,"echo-subscriptions-email-mention":false,"echo-subscriptions-web-mention":true,"echo-subscriptions-web-edit-thank":true,"echo-subscriptions-email-edit-thank":false,"gettingstarted-task-toolbar-show-intro":true,"uls-preferences":"","language":"en","variant-gan":"gan","variant-iu":"iu","variant-kk":"kk","variant-ku":"ku","variant-shi":"shi","variant-sr":"sr","variant-tg":"tg","variant-uz":"uz","variant-zh":"zh","searchNs0":true,"searchNs1":false,"searchNs2":false,"searchNs3":false,"searchNs4":false,"searchNs5":false,"searchNs6":false,"searchNs7":false,"searchNs8":false,"searchNs9":false,"searchNs10":false,"searchNs11":false,"searchNs12":false,"searchNs13":false,"searchNs14":false,"searchNs15":false,"searchNs100":false,"searchNs101":false,"searchNs108":false,"searchNs109":false,"searchNs446":false,"searchNs447":false
+,"searchNs710":false,"searchNs711":false,"searchNs828":false,"searchNs829":false,"gadget-teahouse":1,"gadget-ReferenceTooltips":1,"gadget-DRN-wizard":1,"gadget-charinsert":1,"gadget-mySandbox":1,"variant":"en"});},{},{});mw.loader.implement("user.tokens",function(){mw.user.tokens.set({"editToken":"+\\","patrolToken":false,"watchToken":false});},{},{});
+/* cache key: enwiki:resourceloader:filter:minify-js:7:664b3f39123c8f67ad841d996d382105 */
+}</script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.legacy.ajax","ext.centralauth.centralautologin","ext.visualEditor.viewPageTarget.init","ext.wikimediaShopLink.core","ext.uls.init","ext.uls.interface","wikibase.client.init","ext.centralNotice.bannerController","skins.vector.js"]);
+}</script><script src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/load_004.php"></script><script src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/start" async=""></script>
+<style type="text/css">/*<![CDATA[*/
+.source-c {line-height: normal;}
+.source-c li, .source-c pre {
+	line-height: normal; border: 0px none white;
+}
+/**
+ * GeSHi Dynamically Generated Stylesheet
+ * --------------------------------------
+ * Dynamically generated stylesheet for c
+ * CSS class: source-c, CSS id: 
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ * --------------------------------------
+ */
+.c.source-c .de1, .c.source-c .de2 {font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;font-family: monospace, monospace;}
+.c.source-c  {font-family:monospace;}
+.c.source-c .imp {font-weight: bold; color: red;}
+.c.source-c li, .c.source-c .li1 {font-weight: normal; vertical-align:top;}
+.c.source-c .ln {width:1px;text-align:right;margin:0;padding:0 2px;vertical-align:top;}
+.c.source-c .li2 {font-weight: bold; vertical-align:top;}
+.c.source-c .kw1 {color: #b1b100;}
+.c.source-c .kw2 {color: #000000; font-weight: bold;}
+.c.source-c .kw3 {color: #000066;}
+.c.source-c .kw4 {color: #993333;}
+.c.source-c .co1 {color: #666666; font-style: italic;}
+.c.source-c .co2 {color: #339933;}
+.c.source-c .coMULTI {color: #808080; font-style: italic;}
+.c.source-c .es0 {color: #000099; font-weight: bold;}
+.c.source-c .es1 {color: #000099; font-weight: bold;}
+.c.source-c .es2 {color: #660099; font-weight: bold;}
+.c.source-c .es3 {color: #660099; font-weight: bold;}
+.c.source-c .es4 {color: #660099; font-weight: bold;}
+.c.source-c .es5 {color: #006699; font-weight: bold;}
+.c.source-c .br0 {color: #009900;}
+.c.source-c .sy0 {color: #339933;}
+.c.source-c .st0 {color: #ff0000;}
+.c.source-c .nu0 {color: #0000dd;}
+.c.source-c .nu6 {color: #208080;}
+.c.source-c .nu8 {color: #208080;}
+.c.source-c .nu12 {color: #208080;}
+.c.source-c .nu16 {color:#800080;}
+.c.source-c .nu17 {color:#800080;}
+.c.source-c .nu18 {color:#800080;}
+.c.source-c .nu19 {color:#800080;}
+.c.source-c .me1 {color: #202020;}
+.c.source-c .me2 {color: #202020;}
+.c.source-c .ln-xtra, .c.source-c li.ln-xtra, .c.source-c div.ln-xtra {background-color: #ffc;}
+.c.source-c span.xtra { display:block; }
+
+/*]]>*/
+</style><style type="text/css">/*<![CDATA[*/
+.source-csharp {line-height: normal;}
+.source-csharp li, .source-csharp pre {
+	line-height: normal; border: 0px none white;
+}
+/**
+ * GeSHi Dynamically Generated Stylesheet
+ * --------------------------------------
+ * Dynamically generated stylesheet for csharp
+ * CSS class: source-csharp, CSS id: 
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ * --------------------------------------
+ */
+.csharp.source-csharp .de1, .csharp.source-csharp .de2 {font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;font-family: monospace, monospace;}
+.csharp.source-csharp  {font-family:monospace;}
+.csharp.source-csharp .imp {font-weight: bold; color: red;}
+.csharp.source-csharp li, .csharp.source-csharp .li1 {font-weight: normal; vertical-align:top;}
+.csharp.source-csharp .ln {width:1px;text-align:right;margin:0;padding:0 2px;vertical-align:top;}
+.csharp.source-csharp .li2 {font-weight: bold; vertical-align:top;}
+.csharp.source-csharp .kw1 {color: #0600FF; font-weight: bold;}
+.csharp.source-csharp .kw2 {color: #FF8000; font-weight: bold;}
+.csharp.source-csharp .kw3 {color: #008000;}
+.csharp.source-csharp .kw4 {color: #6666cc; font-weight: bold;}
+.csharp.source-csharp .kw5 {color: #000000;}
+.csharp.source-csharp .co1 {color: #008080; font-style: italic;}
+.csharp.source-csharp .co2 {color: #008080;}
+.csharp.source-csharp .co3 {color: #008080;}
+.csharp.source-csharp .coMULTI {color: #008080; font-style: italic;}
+.csharp.source-csharp .es0 {color: #008080; font-weight: bold;}
+.csharp.source-csharp .es_h {color: #008080; font-weight: bold;}
+.csharp.source-csharp .br0 {color: #008000;}
+.csharp.source-csharp .sy0 {color: #008000;}
+.csharp.source-csharp .st0 {color: #666666;}
+.csharp.source-csharp .st_h {color: #666666;}
+.csharp.source-csharp .nu0 {color: #FF0000;}
+.csharp.source-csharp .me1 {color: #0000FF;}
+.csharp.source-csharp .me2 {color: #0000FF;}
+.csharp.source-csharp .ln-xtra, .csharp.source-csharp li.ln-xtra, .csharp.source-csharp div.ln-xtra {background-color: #ffc;}
+.csharp.source-csharp span.xtra { display:block; }
+
+/*]]>*/
+</style><script src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/geoiplookup"></script><link rel="dns-prefetch" href="http://meta.wikimedia.org/"><!--[if lt IE 7]><style type="text/css">body{behavior:url("/w/static-1.23wmf2/skins/vector/csshover.min.htc")}</style><![endif]--><script src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/load.php" async=""></script></head>
+<body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-Levenshtein_distance skin-vector action-view vector-animateLayout">
+		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="mw-js-message" style="display:none;"></div>
+						<div id="siteNotice"><div id="centralNotice"></div><!-- CentralNotice --></div>
+						<h1 id="firstHeading" class="firstHeading" lang="en"><span dir="auto">Levenshtein distance</span></h1>
+			<div id="bodyContent">
+								<div id="siteSub">From Wikipedia, the free encyclopedia</div>
+								<div id="contentSub"></div>
+												<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-navigation">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" dir="ltr" class="mw-content-ltr" lang="en"><table class="metadata plainlinks ambox ambox-content ambox-Refimprove" role="presentation">
+<tbody><tr>
+<td class="mbox-image">
+<div style="width:52px;"><img alt="" src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/50px-Question_book-new.png" srcset="//upload.wikimedia.org/wikipedia/en/thumb/9/99/Question_book-new.svg/75px-Question_book-new.svg.png 1.5x, //upload.wikimedia.org/wikipedia/en/thumb/9/99/Question_book-new.svg/100px-Question_book-new.svg.png 2x" height="39" width="50"></div>
+</td>
+<td class="mbox-text"><span class="mbox-text-span">This article <b>needs additional citations for verification</b>. <span class="hide-when-compact">Please help <a class="external text" href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit">improve this article</a> by <a href="http://en.wikipedia.org/wiki/Help:Introduction_to_referencing/1" title="Help:Introduction to referencing/1">adding citations to reliable sources</a>. Unsourced material may be <a href="http://en.wikipedia.org/wiki/Template:Citation_needed" title="Template:Citation needed">challenged</a> and <a href="http://en.wikipedia.org/wiki/Wikipedia:Verifiability#Burden_of_evidence" title="Wikipedia:Verifiability">removed</a>.</span> <small><i>(February 2010)</i></small></span></td>
+</tr>
+</tbody></table>
+<p>In <a href="http://en.wikipedia.org/wiki/Information_theory" title="Information theory">information theory</a> and <a href="http://en.wikipedia.org/wiki/Computer_science" title="Computer science">computer science</a>, the <b>Levenshtein distance</b> is a <a href="http://en.wikipedia.org/wiki/String_metric" title="String metric">string metric</a>
+ for measuring the difference between two sequences. Informally, the 
+Levenshtein distance between two words is the minimum number of 
+single-character edits (insertion, deletion, substitution) required to 
+change one word into the other. The phrase <b><a href="http://en.wikipedia.org/wiki/Edit_distance" title="Edit distance">edit distance</a></b> is often used to refer specifically to Levenshtein distance. It is named after <a href="http://en.wikipedia.org/wiki/Vladimir_Levenshtein" title="Vladimir Levenshtein">Vladimir Levenshtein</a>, who considered this distance in 1965.<sup id="cite_ref-1" class="reference"><a href="#cite_note-1"><span>[</span>1<span>]</span></a></sup> It is closely related to <a href="http://en.wikipedia.org/wiki/Sequence_alignment#Pairwise_alignment" title="Sequence alignment">pairwise string alignments</a>.</p>
+<div id="toc" class="toc">
+<div id="toctitle">
+<h2>Contents</h2>
+<span class="toctoggle">&nbsp;[<a href="#" class="internal" id="togglelink">hide</a>]&nbsp;</span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Definition"><span class="tocnumber">1</span> <span class="toctext">Definition</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Example"><span class="tocnumber">1.1</span> <span class="toctext">Example</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Upper_and_lower_bounds"><span class="tocnumber">1.2</span> <span class="toctext">Upper and lower bounds</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Applications"><span class="tocnumber">2</span> <span class="toctext">Applications</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Relationship_with_other_edit_distance_metrics"><span class="tocnumber">3</span> <span class="toctext">Relationship with other edit distance metrics</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Computing_Levenshtein_distance"><span class="tocnumber">4</span> <span class="toctext">Computing Levenshtein distance</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Recursive"><span class="tocnumber">4.1</span> <span class="toctext">Recursive</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Iterative_with_full_matrix"><span class="tocnumber">4.2</span> <span class="toctext">Iterative with full matrix</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#Proof_of_correctness"><span class="tocnumber">4.2.1</span> <span class="toctext">Proof of correctness</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Possible_modifications"><span class="tocnumber">4.2.2</span> <span class="toctext">Possible modifications</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-11"><a href="#Iterative_with_two_matrix_rows"><span class="tocnumber">4.3</span> <span class="toctext">Iterative with two matrix rows</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#See_also"><span class="tocnumber">5</span> <span class="toctext">See also</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#References"><span class="tocnumber">6</span> <span class="toctext">References</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#External_links"><span class="tocnumber">7</span> <span class="toctext">External links</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Definition">Definition</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit&amp;section=1" title="Edit section: Definition">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Mathematically, the Levenshtein distance between two strings <img class="tex" alt="a, b" src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/b345e1dc09f20fdefdea469f09167892.png"> is given by <img class="tex" alt="\operatorname{lev}_{a,b}(|a|,|b|)" src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/8d5f696227e40d27da2362fe7bde6ba9.png"> where</p>
+<dl>
+<dd><img class="tex" alt="\qquad\operatorname{lev}_{a,b}(i,j) = \begin{cases}
+  \max(i,j) &amp; \text{ if} \min(i,j)=0, \\
+  \min \begin{cases}
+          \operatorname{lev}_{a,b}(i-1,j) + 1 \\
+          \operatorname{lev}_{a,b}(i,j-1) + 1 \\
+          \operatorname{lev}_{a,b}(i-1,j-1) + [a_i \neq b_j]
+       \end{cases} &amp; \text{ otherwise.}
+\end{cases}" src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/be1a3d3073692eeaacd92c0796b14243.png"></dd>
+</dl>
+<p>Note that the first element in the minimum corresponds to deletion (from <img class="tex" alt="a" src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/0cc175b9c0f1b6a831c399e269772661.png"> to <img class="tex" alt="b" src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/92eb5ffee6ae2fec3ad71c777531578f.png">), the second to insertion and the third to match or mismatch, depending on whether the respective symbols are the same.</p>
+<h3><span class="mw-headline" id="Example">Example</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit&amp;section=2" title="Edit section: Example">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For example, the Levenshtein distance between "kitten" and "sitting" 
+is 3, since the following three edits change one into the other, and 
+there is no way to do it with fewer than three edits:</p>
+<ol>
+<li><b>k</b>itten → <b>s</b>itten (substitution of "s" for "k")</li>
+<li>sitt<b>e</b>n → sitt<b>i</b>n (substitution of "i" for "e")</li>
+<li>sittin → sittin<b>g</b> (insertion of "g" at the end).</li>
+</ol>
+<h3><span class="mw-headline" id="Upper_and_lower_bounds">Upper and lower bounds</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit&amp;section=3" title="Edit section: Upper and lower bounds">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The Levenshtein distance has several simple upper and lower bounds. These include:</p>
+<ul>
+<li>It is always at least the difference of the sizes of the two strings.</li>
+<li>It is at most the length of the longer string.</li>
+<li>It is zero if and only if the strings are equal.</li>
+<li>If the strings are the same size, the <a href="http://en.wikipedia.org/wiki/Hamming_distance" title="Hamming distance">Hamming distance</a> is an upper bound on the Levenshtein distance.</li>
+<li>The Levenshtein distance between two strings is no greater than the sum of their Levenshtein distances from a third string (<a href="http://en.wikipedia.org/wiki/Triangle_inequality" title="Triangle inequality">triangle inequality</a>).</li>
+</ul>
+<h2><span class="mw-headline" id="Applications">Applications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit&amp;section=4" title="Edit section: Applications">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In <a href="http://en.wikipedia.org/wiki/Approximate_string_matching" title="Approximate string matching">approximate string matching</a>,
+ the objective is to find matches for short strings in many longer 
+texts, in situations where a small number of differences is to be 
+expected. The short strings could come from a dictionary, for instance. 
+Here, one of the strings is typically short, while the other is 
+arbitrarily long. This has a wide range of applications, for instance, <a href="http://en.wikipedia.org/wiki/Spell_checker" title="Spell checker">spell checkers</a>, correction systems for <a href="http://en.wikipedia.org/wiki/Optical_character_recognition" title="Optical character recognition">optical character recognition</a>, and software to assist natural language translation based on <a href="http://en.wikipedia.org/wiki/Translation_memory" title="Translation memory">translation memory</a>.</p>
+<p>The Levenshtein distance can also be computed between two longer 
+strings, but the cost to compute it, which is roughly proportional to 
+the product of the two string lengths, makes this impractical. Thus, 
+when used to aid in <a href="http://en.wikipedia.org/wiki/Fuzzy_string_searching" title="Fuzzy string searching" class="mw-redirect">fuzzy string searching</a> in applications such as <a href="http://en.wikipedia.org/wiki/Record_linkage" title="Record linkage">record linkage</a>, the compared strings are usually short to help improve speed of comparisons.</p>
+<h2><span class="mw-headline" id="Relationship_with_other_edit_distance_metrics">Relationship with other edit distance metrics</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit&amp;section=5" title="Edit section: Relationship with other edit distance metrics">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>There are other popular measures of <a href="http://en.wikipedia.org/wiki/Edit_distance" title="Edit distance">edit distance</a>, which are calculated using a different set of allowable edit operations. For instance,</p>
+<ul>
+<li>the <a href="http://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance" title="Damerau–Levenshtein distance">Damerau–Levenshtein distance</a> allows insertion, deletion, substitution, and the <a href="http://en.wikipedia.org/wiki/Transposition_%28mathematics%29" title="Transposition (mathematics)" class="mw-redirect">transposition</a> of two adjacent characters;</li>
+<li>the <a href="http://en.wikipedia.org/wiki/Longest_common_subsequence_problem" title="Longest common subsequence problem">longest common subsequence</a> metric allows only insertion and deletion, not substitution;</li>
+<li>the <a href="http://en.wikipedia.org/wiki/Hamming_distance" title="Hamming distance">Hamming distance</a> allows only substitution, hence, it only applies to strings of the same length.</li>
+</ul>
+<p><a href="http://en.wikipedia.org/wiki/Edit_distance" title="Edit distance">Edit distance</a>
+ is usually defined as a parametrizable metric calculated with a 
+specific set of allowed edit operations, and each operation is assigned a
+ cost (possibly infinite). This is further generalized by DNA <a href="http://en.wikipedia.org/wiki/Sequence_alignment" title="Sequence alignment">sequence alignment</a> algorithms such as the <a href="http://en.wikipedia.org/wiki/Smith%E2%80%93Waterman_algorithm" title="Smith–Waterman algorithm">Smith–Waterman algorithm</a>, which make an operation's cost depend on where it is applied.</p>
+<h2><span class="mw-headline" id="Computing_Levenshtein_distance">Computing Levenshtein distance</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit&amp;section=6" title="Edit section: Computing Levenshtein distance">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Recursive">Recursive</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit&amp;section=7" title="Edit section: Recursive">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A straightforward recursive implementation <code>LevenshteinDistance</code> function takes two strings, <i>s</i> and <i>t</i>, and returns the Levenshtein distance between them:</p>
+<div dir="ltr" class="mw-geshi mw-code mw-content-ltr">
+<div class="c source-c">
+<pre class="de1"><span class="sy0">;</span> len_s and len_t are the number of characters in string s and t respectively
+<span class="kw4">int</span> LevenshteinDistance<span class="br0">(</span>string s<span class="sy0">,</span> <span class="kw4">int</span> len_s<span class="sy0">,</span> string t<span class="sy0">,</span> <span class="kw4">int</span> len_t<span class="br0">)</span>
+<span class="br0">{</span>
+  <span class="coMULTI">/* test for degenerate cases of empty strings */</span>
+  <span class="kw1">if</span> <span class="br0">(</span>len_s <span class="sy0">==</span> <span class="nu0">0</span><span class="br0">)</span> <span class="kw1">return</span> len_t<span class="sy0">;</span>
+  <span class="kw1">if</span> <span class="br0">(</span>len_t <span class="sy0">==</span> <span class="nu0">0</span><span class="br0">)</span> <span class="kw1">return</span> len_s<span class="sy0">;</span>
+ 
+  <span class="coMULTI">/* test if last characters of the strings match */</span>
+  <span class="kw1">if</span> <span class="br0">(</span>s<span class="br0">[</span>len_s<span class="sy0">-</span><span class="nu0">1</span><span class="br0">]</span> <span class="sy0">==</span> t<span class="br0">[</span>len_t<span class="sy0">-</span><span class="nu0">1</span><span class="br0">]</span><span class="br0">)</span> cost <span class="sy0">=</span> <span class="nu0">0</span><span class="sy0">;</span>
+  <span class="kw1">else</span>                          cost <span class="sy0">=</span> <span class="nu0">1</span><span class="sy0">;</span>
+ 
+  <span class="coMULTI">/* return minimum of delete char from s, delete char from t, and delete char from both */</span>
+  <span class="kw1">return</span> minimum<span class="br0">(</span>LevenshteinDistance<span class="br0">(</span>s<span class="sy0">,</span> len_s <span class="sy0">-</span> <span class="nu0">1</span><span class="sy0">,</span> t<span class="sy0">,</span> len_t    <span class="br0">)</span> <span class="sy0">+</span> <span class="nu0">1</span><span class="sy0">,</span>
+                 LevenshteinDistance<span class="br0">(</span>s<span class="sy0">,</span> len_s    <span class="sy0">,</span> t<span class="sy0">,</span> len_t <span class="sy0">-</span> <span class="nu0">1</span><span class="br0">)</span> <span class="sy0">+</span> <span class="nu0">1</span><span class="sy0">,</span>
+                 LevenshteinDistance<span class="br0">(</span>s<span class="sy0">,</span> len_s <span class="sy0">-</span> <span class="nu0">1</span><span class="sy0">,</span> t<span class="sy0">,</span> len_t <span class="sy0">-</span> <span class="nu0">1</span><span class="br0">)</span> <span class="sy0">+</span> cost<span class="br0">)</span><span class="sy0">;</span>
+<span class="br0">}</span>
+</pre></div>
+</div>
+<p>Unfortunately, the straightforward recursive implementation is very 
+inefficient because it recomputes the Levenshtein distance of the same 
+substrings many times. A better method would never repeat the same 
+distance calculation. For example, the Levenshtein distance of all 
+possible prefixes might be stored in an array <code>d[][]</code> where <code>d[i][j]</code> is the distance between the first <code>i</code> characters of string <code>s</code> and the first <code>j</code> characters of string <code>t</code>.
+ The table is easy to construct one row at a time starting with row 0. 
+When the entire table has been built, the desired distance is <code>d[len_s][len_t]</code>. While this technique is significantly faster, it will consume <code>len_s * len_t</code> more memory than the straightforward recursive implementation.</p>
+<h3><span class="mw-headline" id="Iterative_with_full_matrix">Iterative with full matrix</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit&amp;section=8" title="Edit section: Iterative with full matrix">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<dl>
+<dd>
+<dl>
+<dd><small>Note: This section uses 1-based strings instead of 0-based strings</small></dd>
+</dl>
+</dd>
+</dl>
+<p>Computing the Levenshtein distance is based on the observation that if we reserve a <a href="http://en.wikipedia.org/wiki/Matrix_%28mathematics%29" title="Matrix (mathematics)">matrix</a> to hold the Levenshtein distances between all <a href="http://en.wikipedia.org/wiki/Prefix_%28computer_science%29" title="Prefix (computer science)" class="mw-redirect">prefixes</a> of the first string and all prefixes of the second, then we can compute the values in the matrix in a <a href="http://en.wikipedia.org/wiki/Dynamic_programming" title="Dynamic programming">dynamic programming</a> fashion, and thus find the distance between the two full strings as the last value computed.</p>
+<p>This algorithm, an example of bottom-up <a href="http://en.wikipedia.org/wiki/Dynamic_programming" title="Dynamic programming">dynamic programming</a>, is discussed, with variants, in the 1974 article <i>The <a href="http://en.wikipedia.org/wiki/String-to-string_correction_problem" title="String-to-string correction problem">String-to-string correction problem</a></i> by Robert A. Wagner and Michael J. Fischer.<sup id="cite_ref-2" class="reference"><a href="#cite_note-2"><span>[</span>2<span>]</span></a></sup></p>
+<p>A straightforward implementation, as <a href="http://en.wikipedia.org/wiki/Pseudocode" title="Pseudocode">pseudocode</a> for a function <i>LevenshteinDistance</i> that takes two strings, <i>s</i> of length <i>m</i>, and <i>t</i> of length <i>n</i>, and returns the Levenshtein distance between them:</p>
+<div dir="ltr" class="mw-geshi mw-code mw-content-ltr">
+<div class="c source-c">
+<pre class="de1"><span class="kw4">int</span> LevenshteinDistance<span class="br0">(</span><span class="kw4">char</span> s<span class="br0">[</span><span class="nu0">1</span>..<span class="me1">m</span><span class="br0">]</span><span class="sy0">,</span> <span class="kw4">char</span> t<span class="br0">[</span><span class="nu0">1</span>..<span class="me1">n</span><span class="br0">]</span><span class="br0">)</span>
+<span class="br0">{</span>
+  <span class="co1">// for all i and j, d[i,j] will hold the Levenshtein distance between</span>
+  <span class="co1">// the first i characters of s and the first j characters of t;</span>
+  <span class="co1">// note that d has (m+1)*(n+1) values</span>
+  declare <span class="kw4">int</span> d<span class="br0">[</span><span class="nu0">0</span>..<span class="me1">m</span><span class="sy0">,</span> <span class="nu0">0</span>..<span class="me1">n</span><span class="br0">]</span>
+ 
+  clear all elements in d <span class="co1">// set each element to zero</span>
+ 
+  <span class="co1">// source prefixes can be transformed into empty string by</span>
+  <span class="co1">// dropping all characters</span>
+  <span class="kw1">for</span> i from <span class="nu0">1</span> to m
+    <span class="br0">{</span>
+      d<span class="br0">[</span>i<span class="sy0">,</span> <span class="nu0">0</span><span class="br0">]</span> <span class="sy0">:=</span> i
+    <span class="br0">}</span>
+ 
+  <span class="co1">// target prefixes can be reached from empty source prefix</span>
+  <span class="co1">// by inserting every characters</span>
+  <span class="kw1">for</span> j from <span class="nu0">1</span> to n
+    <span class="br0">{</span>
+      d<span class="br0">[</span><span class="nu0">0</span><span class="sy0">,</span> j<span class="br0">]</span> <span class="sy0">:=</span> j
+    <span class="br0">}</span>
+ 
+  <span class="kw1">for</span> j from <span class="nu0">1</span> to n
+    <span class="br0">{</span>
+      <span class="kw1">for</span> i from <span class="nu0">1</span> to m
+        <span class="br0">{</span>
+          <span class="kw1">if</span> s<span class="br0">[</span>i<span class="br0">]</span> <span class="sy0">=</span> t<span class="br0">[</span>j<span class="br0">]</span> then
+            d<span class="br0">[</span>i<span class="sy0">,</span> j<span class="br0">]</span> <span class="sy0">:=</span> d<span class="br0">[</span>i<span class="sy0">-</span><span class="nu0">1</span><span class="sy0">,</span> j<span class="sy0">-</span><span class="nu0">1</span><span class="br0">]</span>       <span class="co1">// no operation required</span>
+          <span class="kw1">else</span>
+            d<span class="br0">[</span>i<span class="sy0">,</span> j<span class="br0">]</span> <span class="sy0">:=</span> minimum
+                    <span class="br0">(</span>
+                      d<span class="br0">[</span>i<span class="sy0">-</span><span class="nu0">1</span><span class="sy0">,</span> j<span class="br0">]</span> <span class="sy0">+</span> <span class="nu0">1</span><span class="sy0">,</span>  <span class="co1">// a deletion</span>
+                      d<span class="br0">[</span>i<span class="sy0">,</span> j<span class="sy0">-</span><span class="nu0">1</span><span class="br0">]</span> <span class="sy0">+</span> <span class="nu0">1</span><span class="sy0">,</span>  <span class="co1">// an insertion</span>
+                      d<span class="br0">[</span>i<span class="sy0">-</span><span class="nu0">1</span><span class="sy0">,</span> j<span class="sy0">-</span><span class="nu0">1</span><span class="br0">]</span> <span class="sy0">+</span> <span class="nu0">1</span> <span class="co1">// a substitution</span>
+                    <span class="br0">)</span>
+        <span class="br0">}</span>
+    <span class="br0">}</span>
+ 
+  <span class="kw1">return</span> d<span class="br0">[</span>m<span class="sy0">,</span> n<span class="br0">]</span>
+<span class="br0">}</span>
+</pre></div>
+</div>
+<p>Note that this implementation does not fit the <a href="#Definition">definition</a>
+ precisely: it always prefers matches, even if insertions or deletions 
+provided a better score. This is equivalent; it can be shown that for 
+every optimal alignment (which induces the Levenshtein distance) there 
+is another optimal alignment that prefers matches in the sense of this 
+implementation.<sup id="cite_ref-3" class="reference"><a href="#cite_note-3"><span>[</span>3<span>]</span></a></sup></p>
+<p>Two examples of the resulting matrix (hovering over a number reveals the operation performed to get that number):</p>
+<center>
+<table>
+<tbody><tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<td></td>
+<td></td>
+<th>k</th>
+<th>i</th>
+<th>t</th>
+<th>t</th>
+<th>e</th>
+<th>n</th>
+</tr>
+<tr>
+<td></td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr>
+<th>s</th>
+<td>1</td>
+<td><span title="substitution of 'k' for 's'" style="border-bottom:1px dotted">1</span></td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr>
+<th>i</th>
+<td>2</td>
+<td>2</td>
+<td><span title="'i' equals 'i'" style="border-bottom:1px dotted">1</span></td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+</tr>
+<tr>
+<th>t</th>
+<td>3</td>
+<td>3</td>
+<td>2</td>
+<td><span title="'t' equals 't'" style="border-bottom:1px dotted">1</span></td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+</tr>
+<tr>
+<th>t</th>
+<td>4</td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td><span title="'t' equals 't'" style="border-bottom:1px dotted">1</span></td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<th>i</th>
+<td>5</td>
+<td>5</td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td><span title="substitution of 'e' for 'i'" style="border-bottom:1px dotted">2</span></td>
+<td>3</td>
+</tr>
+<tr>
+<th>n</th>
+<td>6</td>
+<td>6</td>
+<td>5</td>
+<td>4</td>
+<td>3</td>
+<td>3</td>
+<td><span title="'n' equals 'n'" style="border-bottom:1px dotted">2</span></td>
+</tr>
+<tr>
+<th>g</th>
+<td>7</td>
+<td>7</td>
+<td>6</td>
+<td>5</td>
+<td>4</td>
+<td>4</td>
+<td><span title="insert 'g'" style="border-bottom:1px dotted">3</span></td>
+</tr>
+</tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<td></td>
+<td></td>
+<th>S</th>
+<th>a</th>
+<th>t</th>
+<th>u</th>
+<th>r</th>
+<th>d</th>
+<th>a</th>
+<th>y</th>
+</tr>
+<tr>
+<td></td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+</tr>
+<tr>
+<th>S</th>
+<td>1</td>
+<td><span title="'S' equals 'S'" style="border-bottom:1px dotted">0</span></td>
+<td><span title="delete 'a'" style="border-bottom:1px dotted">1</span></td>
+<td><span title="delete 't'" style="border-bottom:1px dotted">2</span></td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+</tr>
+<tr>
+<th>u</th>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td><span title="'u' equals 'u'" style="border-bottom:1px dotted">2</span></td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr>
+<th>n</th>
+<td>3</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td><span title="substitution of 'r' for 'n'" style="border-bottom:1px dotted">3</span></td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr>
+<th>d</th>
+<td>4</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>4</td>
+<td><span title="'d' equals 'd'" style="border-bottom:1px dotted">3</span></td>
+<td>4</td>
+<td>5</td>
+</tr>
+<tr>
+<th>a</th>
+<td>5</td>
+<td>4</td>
+<td>3</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td><span title="'a' equals 'a'" style="border-bottom:1px dotted">3</span></td>
+<td>4</td>
+</tr>
+<tr>
+<th>y</th>
+<td>6</td>
+<td>5</td>
+<td>4</td>
+<td>4</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>4</td>
+<td><span title="'y' equals 'y'" style="border-bottom:1px dotted">3</span></td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</center>
+<p>The <a href="http://en.wikipedia.org/wiki/Invariant_%28mathematics%29" title="Invariant (mathematics)">invariant</a> maintained throughout the algorithm is that we can transform the initial segment <code>s[1..i]</code> into <code>t[1..j]</code> using a minimum of <code>d[i,j]</code> operations. At the end, the bottom-right element of the array contains the answer.</p>
+<h4><span class="mw-headline" id="Proof_of_correctness">Proof of correctness</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit&amp;section=9" title="Edit section: Proof of correctness">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>As mentioned earlier, the <a href="http://en.wikipedia.org/wiki/Invariant_%28mathematics%29" title="Invariant (mathematics)">invariant</a> is that we can transform the initial segment <code>s[1..i]</code> into <code>t[1..j]</code> using a minimum of <code>d[i,j]</code> operations. This invariant holds since:</p>
+<ul>
+<li>It is initially true on row and column 0 because <code>s[1..i]</code> can be transformed into the empty string <code>t[1..0]</code> by simply dropping all <code>i</code> characters. Similarly, we can transform <code>s[1..0]</code> to <code>t[1..j]</code> by simply adding all <code>j</code> characters.</li>
+<li>If <code>s[i] = t[j]</code>, and we can transform <code>s[1..i-1]</code> to <code>t[1..j-1]</code> in <code>k</code> operations, then we can do the same to <code>s[1..i]</code> and just leave the last character alone, giving <code>k</code> operations.</li>
+<li>Otherwise, the distance is the minimum of the three possible ways to do the transformation:
+<ul>
+<li>If we can transform <code>s[1..i]</code> to <code>t[1..j-1]</code> in <code>k</code> operations, then we can simply add <code>t[j]</code> afterwards to get <code>t[1..j]</code> in <code>k+1</code> operations (insertion).</li>
+<li>If we can transform <code>s[1..i-1]</code> to <code>t[1..j]</code> in <code>k</code> operations, then we can remove <code>s[i]</code> and then do the same transformation, for a total of <code>k+1</code> operations (deletion).</li>
+<li>If we can transform <code>s[1..i-1]</code> to <code>t[1..j-1]</code> in <code>k</code> operations, then we can do the same to <code>s[1..i]</code>, and exchange the original <code>s[i]</code> for <code>t[j]</code> afterwards, for a total of <code>k+1</code> operations (substitution).</li>
+</ul>
+</li>
+<li>The operations required to transform <code>s[1..n]</code> into <code>t[1..m]</code> is of course the number required to transform all of <code>s</code> into all of <code>t</code>, and so <code>d[n,m]</code> holds our result.</li>
+</ul>
+<p>This proof fails to validate that the number placed in <code>d[i,j]</code> is in fact minimal; this is more difficult to show, and involves an <a href="http://en.wikipedia.org/wiki/Reductio_ad_absurdum" title="Reductio ad absurdum">argument by contradiction</a> in which we assume <code>d[i,j]</code> is smaller than the minimum of the three, and use this to show one of the three is not minimal.</p>
+<h4><span class="mw-headline" id="Possible_modifications">Possible modifications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit&amp;section=10" title="Edit section: Possible modifications">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Possible modifications to this algorithm include:</p>
+<ul>
+<li>We can adapt the algorithm to use less space, <a href="http://en.wikipedia.org/wiki/Big_O_notation" title="Big O notation"><i>O</i></a>(<i>min(n,m)</i>) instead of <i>O</i>(<i>mn</i>), since it only requires that the previous row and current row be stored at any one time.</li>
+<li>We can store the number of insertions, deletions, and substitutions 
+separately, or even the positions at which they occur, which is always <code>j</code>.</li>
+<li>We can normalize the distance to the interval <code>[0,1]</code>.</li>
+<li>If we are only interested in the distance if it is smaller than a threshold <i>k</i>, then it suffices to compute a diagonal stripe of width <i>2k+1</i> in the matrix. In this way, the algorithm can be run in <a href="http://en.wikipedia.org/wiki/Big_O_notation" title="Big O notation"><i>O</i></a>(<i>kl</i>) time, where <i>l</i> is the length of the shortest string.<sup id="cite_ref-4" class="reference"><a href="#cite_note-4"><span>[</span>4<span>]</span></a></sup></li>
+<li>We can give different penalty costs to insertion, deletion and 
+substitution. We can also give penalty costs that depend on which 
+characters are inserted, deleted or substituted.</li>
+<li>By initializing the first row of the matrix with <i>0</i>, the algorithm can be used for <a href="http://en.wikipedia.org/wiki/Fuzzy_string_searching" title="Fuzzy string searching" class="mw-redirect">fuzzy string search</a> of a string in a text.<sup id="cite_ref-5" class="reference"><a href="#cite_note-5"><span>[</span>5<span>]</span></a></sup>
+ This modification gives the end-position of matching substrings of the 
+text. To determine the start-position of the matching substrings, the 
+number of insertions and deletions can be stored separately and used to 
+compute the start-position from the end-position.<sup id="cite_ref-6" class="reference"><a href="#cite_note-6"><span>[</span>6<span>]</span></a></sup></li>
+<li>This algorithm <a href="http://en.wikipedia.org/wiki/Parallel_computing" title="Parallel computing">parallelizes</a> poorly, due to a large number of <a href="http://en.wikipedia.org/wiki/Data_dependency" title="Data dependency">data dependencies</a>. However, all the <code>cost</code> values can be computed in parallel, and the algorithm can be adapted to perform the <code>minimum</code> function in phases to eliminate dependencies.</li>
+<li>By examining diagonals instead of rows, and by using <a href="http://en.wikipedia.org/wiki/Lazy_evaluation" title="Lazy evaluation">lazy evaluation</a>, we can find the Levenshtein distance in <i>O</i>(<i>m</i> (1 + <i>d</i>)) time (where <i>d</i> is the Levenshtein distance), which is much faster than the regular dynamic programming algorithm if the distance is small.<sup id="cite_ref-7" class="reference"><a href="#cite_note-7"><span>[</span>7<span>]</span></a></sup></li>
+</ul>
+<h3><span class="mw-headline" id="Iterative_with_two_matrix_rows">Iterative with two matrix rows</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit&amp;section=11" title="Edit section: Iterative with two matrix rows">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>It turns out that only two rows of the table are needed for the 
+construction: the previous row and the current row (the one being 
+calculated).</p>
+<p>The Levenshtein distance may be calculated iteratively using the following algorithm:<sup id="cite_ref-8" class="reference"><a href="#cite_note-8"><span>[</span>8<span>]</span></a></sup></p>
+<div dir="ltr" class="mw-geshi mw-code mw-content-ltr">
+<div class="csharp source-csharp">
+<pre class="de1"><span class="kw1">static</span> <span class="kw4">int</span> LevenshteinDistance<span class="br0">(</span><span class="kw4">string</span> s, <span class="kw4">string</span> t<span class="br0">)</span>
+<span class="br0">{</span>
+    <span class="co1">// degenerate cases</span>
+    <span class="kw1">if</span> <span class="br0">(</span>s <span class="sy0">==</span> t<span class="br0">)</span> <span class="kw1">return</span> <span class="nu0">0</span><span class="sy0">;</span>
+    <span class="kw1">if</span> <span class="br0">(</span>s<span class="sy0">.</span><span class="me1">Length</span> <span class="sy0">==</span> <span class="nu0">0</span><span class="br0">)</span> <span class="kw1">return</span> t<span class="sy0">.</span><span class="me1">Length</span><span class="sy0">;</span>
+    <span class="kw1">if</span> <span class="br0">(</span>t<span class="sy0">.</span><span class="me1">Length</span> <span class="sy0">==</span> <span class="nu0">0</span><span class="br0">)</span> <span class="kw1">return</span> s<span class="sy0">.</span><span class="me1">Length</span><span class="sy0">;</span>
+ 
+    <span class="co1">// create two work vectors of integer distances</span>
+    <span class="kw4">int</span><span class="br0">[</span><span class="br0">]</span> v0 <span class="sy0">=</span> <span class="kw3">new</span> <span class="kw4">int</span><span class="br0">[</span>t<span class="sy0">.</span><span class="me1">Length</span> <span class="sy0">+</span> <span class="nu0">1</span><span class="br0">]</span><span class="sy0">;</span>
+    <span class="kw4">int</span><span class="br0">[</span><span class="br0">]</span> v1 <span class="sy0">=</span> <span class="kw3">new</span> <span class="kw4">int</span><span class="br0">[</span>t<span class="sy0">.</span><span class="me1">Length</span> <span class="sy0">+</span> <span class="nu0">1</span><span class="br0">]</span><span class="sy0">;</span>
+ 
+    <span class="co1">// initialize v0 (the previous row of distances)</span>
+    <span class="co1">// this row is A[0][i]: edit distance for an empty s</span>
+    <span class="co1">// the distance is just the number of characters to delete from t</span>
+    <span class="kw1">for</span> <span class="br0">(</span><span class="kw4">int</span> i <span class="sy0">=</span> <span class="nu0">0</span><span class="sy0">;</span> i <span class="sy0">&lt;</span> v0<span class="sy0">.</span><span class="me1">Length</span><span class="sy0">;</span> i<span class="sy0">++</span><span class="br0">)</span>
+        v0<span class="br0">[</span>i<span class="br0">]</span> <span class="sy0">=</span> i<span class="sy0">;</span>
+ 
+    <span class="kw1">for</span> <span class="br0">(</span><span class="kw4">int</span> i <span class="sy0">=</span> <span class="nu0">0</span><span class="sy0">;</span> i <span class="sy0">&lt;</span> s<span class="sy0">.</span><span class="me1">Length</span><span class="sy0">;</span> i<span class="sy0">++</span><span class="br0">)</span>
+    <span class="br0">{</span>
+        <span class="co1">// calculate v1 (current row distances) from the previous row v0</span>
+ 
+        <span class="co1">// first element of v1 is A[i+1][0]</span>
+        <span class="co1">//   edit distance is delete (i+1) chars from s to match empty t</span>
+        v1<span class="br0">[</span><span class="nu0">0</span><span class="br0">]</span> <span class="sy0">=</span> i <span class="sy0">+</span> <span class="nu0">1</span><span class="sy0">;</span>
+ 
+        <span class="co1">// use formula to fill in the rest of the row</span>
+        <span class="kw1">for</span> <span class="br0">(</span><span class="kw4">int</span> j <span class="sy0">=</span> <span class="nu0">0</span><span class="sy0">;</span> j <span class="sy0">&lt;</span> t<span class="sy0">.</span><span class="me1">Length</span><span class="sy0">;</span> j<span class="sy0">++</span><span class="br0">)</span>
+        <span class="br0">{</span>
+            <span class="kw1">var</span> cost <span class="sy0">=</span> <span class="br0">(</span>s<span class="br0">[</span>i<span class="br0">]</span> <span class="sy0">==</span> t<span class="br0">[</span>j<span class="br0">]</span><span class="br0">)</span> <span class="sy0">?</span> <span class="nu0">0</span> <span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">;</span>
+            v1<span class="br0">[</span>j <span class="sy0">+</span> <span class="nu0">1</span><span class="br0">]</span> <span class="sy0">=</span> Minimum<span class="br0">(</span>v1<span class="br0">[</span>j<span class="br0">]</span> <span class="sy0">+</span> <span class="nu0">1</span>, v0<span class="br0">[</span>j <span class="sy0">+</span> <span class="nu0">1</span><span class="br0">]</span> <span class="sy0">+</span> <span class="nu0">1</span>, v0<span class="br0">[</span>j<span class="br0">]</span> <span class="sy0">+</span> cost<span class="br0">)</span><span class="sy0">;</span>
+        <span class="br0">}</span>
+ 
+        <span class="co1">// copy v1 (current row) to v0 (previous row) for next iteration</span>
+        <span class="kw1">for</span> <span class="br0">(</span><span class="kw4">int</span> j <span class="sy0">=</span> <span class="nu0">0</span><span class="sy0">;</span> j <span class="sy0">&lt;</span> v0<span class="sy0">.</span><span class="me1">Length</span><span class="sy0">;</span> j<span class="sy0">++</span><span class="br0">)</span>
+            v0<span class="br0">[</span>j<span class="br0">]</span> <span class="sy0">=</span> v1<span class="br0">[</span>j<span class="br0">]</span><span class="sy0">;</span>
+    <span class="br0">}</span>
+ 
+    <span class="kw1">return</span> v1<span class="br0">[</span>t<span class="sy0">.</span><span class="me1">Length</span><span class="br0">]</span><span class="sy0">;</span>
+<span class="br0">}</span>
+</pre></div>
+</div>
+<h2><span class="mw-headline" id="See_also">See also</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit&amp;section=12" title="Edit section: See also">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<div style="-moz-column-count:2; column-count:2;">
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Agrep" title="Agrep">agrep</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Bitap_algorithm" title="Bitap algorithm">Bitap algorithm</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance" title="Damerau–Levenshtein distance">Damerau–Levenshtein distance</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Diff" title="Diff">diff</a></li>
+<li><a href="http://en.wikipedia.org/wiki/MinHash" title="MinHash">MinHash</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Dynamic_time_warping" title="Dynamic time warping">Dynamic time warping</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Euclidean_distance" title="Euclidean distance">Euclidean distance</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Fuzzy_string_searching" title="Fuzzy string searching" class="mw-redirect">Fuzzy string searching</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Hamming_weight" title="Hamming weight">Hamming weight</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Hirschberg%27s_algorithm" title="Hirschberg's algorithm">Hirschberg's algorithm</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Homology_%28biology%29#Sequence_homology" title="Homology (biology)">Homology of sequences in genetics</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Hunt%E2%80%93McIlroy_algorithm" title="Hunt–McIlroy algorithm">Hunt–McIlroy algorithm</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Jaccard_index" title="Jaccard index">Jaccard index</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance" title="Jaro–Winkler distance">Jaro–Winkler distance</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Levenshtein_automaton" title="Levenshtein automaton">Levenshtein automaton</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Longest_common_subsequence_problem" title="Longest common subsequence problem">Longest common subsequence problem</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Lucene" title="Lucene">Lucene</a> (an open source search engine that implements edit distance)</li>
+<li><a href="http://en.wikipedia.org/wiki/Manhattan_distance" title="Manhattan distance" class="mw-redirect">Manhattan distance</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Metric_space" title="Metric space">Metric space</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Needleman%E2%80%93Wunsch_algorithm" title="Needleman–Wunsch algorithm">Needleman–Wunsch algorithm</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Optimal_matching" title="Optimal matching">Optimal matching</a> algorithm</li>
+<li><a href="http://en.wikipedia.org/wiki/Sequence_alignment" title="Sequence alignment">Sequence alignment</a></li>
+<li><a href="http://en.wikipedia.org/w/index.php?title=Similarity_space&amp;action=edit&amp;redlink=1" class="new" title="Similarity space (de pagina bestaat niet)">Similarity space</a> on <a href="http://en.wikipedia.org/wiki/Numerical_taxonomy" title="Numerical taxonomy">Numerical taxonomy</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Smith%E2%80%93Waterman_algorithm" title="Smith–Waterman algorithm">Smith–Waterman algorithm</a></li>
+<li><a href="http://en.wikipedia.org/wiki/S%C3%B8rensen_similarity_index" title="Sørensen similarity index" class="mw-redirect">Sørensen similarity index</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Wagner-Fischer_algorithm" title="Wagner-Fischer algorithm" class="mw-redirect">Wagner-Fischer algorithm</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Locality-sensitive_hashing" title="Locality-sensitive hashing">Locality-sensitive hashing</a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="References">References</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit&amp;section=13" title="Edit section: References">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<div class="reflist columns references-column-width" style="-moz-column-width: 30em; -webkit-column-width: 30em; column-width: 30em; list-style-type: decimal;">
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><b><a href="#cite_ref-1"><span class="cite-accessibility-label">Jump up </span>^</a></b></span> <span class="reference-text"><span class="citation journal">В.И. Левенштейн (1965). "Двоичные коды с исправлением выпадений, вставок и замещений символов". <i>Доклады Академий Наук СCCP</i> <b>163</b> (4): 845–8.</span><span title="ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3ALevenshtein+distance&amp;rft.atitle=%D0%94%D0%B2%D0%BE%D0%B8%D1%87%D0%BD%D1%8B%D0%B5+%D0%BA%D0%BE%D0%B4%D1%8B+%D1%81+%D0%B8%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D0%BC+%D0%B2%D1%8B%D0%BF%D0%B0%D0%B4%D0%B5%D0%BD%D0%B8%D0%B9%2C+%D0%B2%D1%81%D1%82%D0%B0%D0%B2%D0%BE%D0%BA+%D0%B8+%D0%B7%D0%B0%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B9+%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB%D0%BE%D0%B2&amp;rft.au=%D0%92.%D0%98.+%D0%9B%D0%B5%D0%B2%D0%B5%D0%BD%D1%88%D1%82%D0%B5%D0%B9%D0%BD&amp;rft.aulast=%D0%92.%D0%98.+%D0%9B%D0%B5%D0%B2%D0%B5%D0%BD%D1%88%D1%82%D0%B5%D0%B9%D0%BD&amp;rft.date=1965&amp;rft.genre=article&amp;rft.issue=4&amp;rft.jtitle=%D0%94%D0%BE%D0%BA%D0%BB%D0%B0%D0%B4%D1%8B+%D0%90%D0%BA%D0%B0%D0%B4%D0%B5%D0%BC%D0%B8%D0%B9+%D0%9D%D0%B0%D1%83%D0%BA+%D0%A1CCP&amp;rft.pages=845%E2%80%938&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.volume=163" class="Z3988"><span style="display:none;">&nbsp;</span></span> Appeared in English as: <span class="citation journal">Levenshtein VI (1966). <a rel="nofollow" class="external text" href="http://www.scribd.com/doc/18654513/levenshtein?secret_password=1aycnw239qw4jqjtsm34#full">"Binary codes capable of correcting deletions, insertions, and reversals"</a>. <i>Soviet Physics Doklady</i> <b>10</b>: 707–10.</span><span title="ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3ALevenshtein+distance&amp;rft.atitle=Binary+codes+capable+of+correcting+deletions%2C+insertions%2C+and+reversals&amp;rft.aulast=Levenshtein+VI&amp;rft.au=Levenshtein+VI&amp;rft.date=1966&amp;rft.genre=article&amp;rft_id=http%3A%2F%2Fwww.scribd.com%2Fdoc%2F18654513%2Flevenshtein%3Fsecret_password%3D1aycnw239qw4jqjtsm34%23full&amp;rft.jtitle=Soviet+Physics+Doklady&amp;rft.pages=707%E2%80%9310&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.volume=10" class="Z3988"><span style="display:none;">&nbsp;</span></span></span></li>
+<li id="cite_note-2"><span class="mw-cite-backlink"><b><a href="#cite_ref-2"><span class="cite-accessibility-label">Jump up </span>^</a></b></span> <span class="reference-text"><span id="CITEREFWagnerFischer1974" class="citation">Wagner, Robert A.; <a href="http://en.wikipedia.org/wiki/Michael_J._Fischer" title="Michael J. Fischer">Fischer, Michael J.</a> (1974), "The String-to-String Correction Problem", <i>Journal of the ACM</i> <b>21</b> (1): 168–173, <a href="http://en.wikipedia.org/wiki/Digital_object_identifier" title="Digital object identifier">doi</a>:<a rel="nofollow" class="external text" href="http://dx.doi.org/10.1145%2F321796.321811">10.1145/321796.321811</a></span><span title="ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3ALevenshtein+distance&amp;rft.atitle=The+String-to-String+Correction+Problem&amp;rft.aufirst=Robert+A.&amp;rft.au=Fischer%2C+Michael+J.&amp;rft.aulast=Wagner&amp;rft.au=Wagner%2C+Robert+A.&amp;rft.date=1974&amp;rft.genre=article&amp;rft_id=info%3Adoi%2F10.1145%2F321796.321811&amp;rft.issue=1&amp;rft.jtitle=Journal+of+the+ACM&amp;rft.pages=168%E2%80%93173&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.volume=21" class="Z3988"><span style="display:none;">&nbsp;</span></span></span></li>
+<li id="cite_note-3"><span class="mw-cite-backlink"><b><a href="#cite_ref-3"><span class="cite-accessibility-label">Jump up </span>^</a></b></span> <span class="reference-text"><a rel="nofollow" class="external text" href="http://cs.stackexchange.com/a/2997">Micro-optimisation for edit distance computation: is it valid?</a></span></li>
+<li id="cite_note-4"><span class="mw-cite-backlink"><b><a href="#cite_ref-4"><span class="cite-accessibility-label">Jump up </span>^</a></b></span> <span class="reference-text"><span class="citation book">Gusfield, Dan (1997). <i>Algorithms on strings, trees, and sequences: computer science and computational biology</i>. Cambridge, UK: Cambridge University Press. pp.&nbsp;263–264. <a href="http://en.wikipedia.org/wiki/International_Standard_Book_Number" title="International Standard Book Number">ISBN</a>&nbsp;<a href="http://en.wikipedia.org/wiki/Special:BookSources/0-521-58519-8" title="Special:BookSources/0-521-58519-8">0-521-58519-8</a>.</span><span title="ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3ALevenshtein+distance&amp;rft.au=Gusfield%2C+Dan&amp;rft.aulast=Gusfield%2C+Dan&amp;rft.btitle=Algorithms+on+strings%2C+trees%2C+and+sequences%3A+computer+science+and+computational+biology&amp;rft.date=1997&amp;rft.genre=book&amp;rft.isbn=0-521-58519-8&amp;rft.pages=263%E2%80%93264&amp;rft.place=Cambridge%2C+UK&amp;rft.pub=Cambridge+University+Press&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook" class="Z3988"><span style="display:none;">&nbsp;</span></span></span></li>
+<li id="cite_note-5"><span class="mw-cite-backlink"><b><a href="#cite_ref-5"><span class="cite-accessibility-label">Jump up </span>^</a></b></span> <span class="reference-text"><span class="citation journal">Navarro, Gonzalo (March 2001). "A guided tour to approximate string matching". <i>ACM Computing Surveys</i> <b>33</b> (1): 31–88. <a href="http://en.wikipedia.org/wiki/Digital_object_identifier" title="Digital object identifier">doi</a>:<a rel="nofollow" class="external text" href="http://dx.doi.org/10.1145%2F375360.375365">10.1145/375360.375365</a>.</span><span title="ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3ALevenshtein+distance&amp;rft.atitle=A+guided+tour+to+approximate+string+matching&amp;rft.aufirst=Gonzalo&amp;rft.aulast=Navarro&amp;rft.au=Navarro%2C+Gonzalo&amp;rft.date=March+2001&amp;rft.genre=article&amp;rft_id=info%3Adoi%2F10.1145%2F375360.375365&amp;rft.issue=1&amp;rft.jtitle=ACM+Computing+Surveys&amp;rft.pages=31%E2%80%9388&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.volume=33" class="Z3988"><span style="display:none;">&nbsp;</span></span></span></li>
+<li id="cite_note-6"><span class="mw-cite-backlink"><b><a href="#cite_ref-6"><span class="cite-accessibility-label">Jump up </span>^</a></b></span> <span class="reference-text">Bruno Woltzenlogel Paleo. <a rel="nofollow" class="external text" href="http://www.logic.at/people/bruno/Papers/2007-GATE-ESSLLI.pdf">An approximate gazetteer for GATE based on levenshtein distance</a>. Student Section of the European Summer School in Logic, Language and Information (<a href="http://en.wikipedia.org/wiki/European_Summer_School_in_Logic,_Language_and_Information" title="European Summer School in Logic, Language and Information">ESSLLI</a>), 2007.</span></li>
+<li id="cite_note-7"><span class="mw-cite-backlink"><b><a href="#cite_ref-7"><span class="cite-accessibility-label">Jump up </span>^</a></b></span> <span class="reference-text"><span class="citation journal">Allison, L. (September 1992). <a rel="nofollow" class="external text" href="http://www.csse.monash.edu.au/%7Elloyd/tildeStrings/Alignment/92.IPL.html">"Lazy Dynamic-Programming can be Eager"</a>. <i>Inf. Proc. Letters</i> <b>43</b> (4): 207–12. <a href="http://en.wikipedia.org/wiki/Digital_object_identifier" title="Digital object identifier">doi</a>:<a rel="nofollow" class="external text" href="http://dx.doi.org/10.1016%2F0020-0190%2892%2990202-7">10.1016/0020-0190(92)90202-7</a>.</span><span title="ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3ALevenshtein+distance&amp;rft.atitle=Lazy+Dynamic-Programming+can+be+Eager&amp;rft.au=Allison%2C+L.&amp;rft.aufirst=L.&amp;rft.aulast=Allison&amp;rft.date=1992&amp;rft.genre=article&amp;rft_id=http%3A%2F%2Fwww.csse.monash.edu.au%2F~lloyd%2FtildeStrings%2FAlignment%2F92.IPL.html&amp;rft_id=info%3Adoi%2F10.1016%2F0020-0190%2892%2990202-7&amp;rft.issue=4&amp;rft.jtitle=Inf.+Proc.+Letters&amp;rft.pages=207%E2%80%9312&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.volume=43" class="Z3988"><span style="display:none;">&nbsp;</span></span></span></li>
+<li id="cite_note-8"><span class="mw-cite-backlink"><b><a href="#cite_ref-8"><span class="cite-accessibility-label">Jump up </span>^</a></b></span> <span class="reference-text"><span id="CITEREFHjelmqvist2012" class="citation">Hjelmqvist, Sten (26 Mar 2012), <a rel="nofollow" class="external text" href="http://www.codeproject.com/Articles/13525/Fast-memory-efficient-Levenshtein-algorithm"><i>Fast, memory efficient Levenshtein algorithm</i></a></span><span title="ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3ALevenshtein+distance&amp;rft.aufirst=Sten&amp;rft.au=Hjelmqvist%2C+Sten&amp;rft.aulast=Hjelmqvist&amp;rft.btitle=Fast%2C+memory+efficient+Levenshtein+algorithm&amp;rft.date=26+Mar+2012&amp;rft.genre=book&amp;rft_id=http%3A%2F%2Fwww.codeproject.com%2FArticles%2F13525%2FFast-memory-efficient-Levenshtein-algorithm&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook" class="Z3988"><span style="display:none;">&nbsp;</span></span></span></li>
+</ol>
+</div>
+<h2><span class="mw-headline" id="External_links">External links</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit&amp;section=14" title="Edit section: External links">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<table class="metadata mbox-small plainlinks" style="border:1px solid #aaa; background-color:#f9f9f9;">
+<tbody><tr>
+<td class="mbox-image"><img alt="" src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/40px-Wikibooks-logo-en-noslogan.png" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/d/df/Wikibooks-logo-en-noslogan.svg/60px-Wikibooks-logo-en-noslogan.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/d/df/Wikibooks-logo-en-noslogan.svg/80px-Wikibooks-logo-en-noslogan.svg.png 2x" height="40" width="40"></td>
+<td class="mbox-text plainlist" style="">The Wikibook <i><a href="http://en.wikibooks.org/wiki/R_Programming" class="extiw" title="wikibooks:R Programming">R_Programming</a></i> has a page on the topic of: <i><b><a href="http://en.wikibooks.org/wiki/R_Programming/Text_Processing#Edit_distance" class="extiw" title="wikibooks:R Programming/Text Processing">Levenshtein distance in R</a></b></i></td>
+</tr>
+</tbody></table>
+<table class="metadata mbox-small plainlinks" style="border:1px solid #aaa; background-color:#f9f9f9;">
+<tbody><tr>
+<td class="mbox-image"><img alt="" src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/40px-Wikibooks-logo-en-noslogan.png" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/d/df/Wikibooks-logo-en-noslogan.svg/60px-Wikibooks-logo-en-noslogan.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/d/df/Wikibooks-logo-en-noslogan.svg/80px-Wikibooks-logo-en-noslogan.svg.png 2x" height="40" width="40"></td>
+<td class="mbox-text plainlist" style="">The Wikibook <i><a href="http://en.wikibooks.org/wiki/Algorithm_implementation" class="extiw" title="wikibooks:Algorithm implementation">Algorithm implementation</a></i> has a page on the topic of: <i><b><a href="http://en.wikibooks.org/wiki/Algorithm_implementation/Strings/Levenshtein_distance" class="extiw" title="wikibooks:Algorithm implementation/Strings/Levenshtein distance">Levenshtein distance</a></b></i></td>
+</tr>
+</tbody></table>
+<ul>
+<li><a rel="nofollow" class="external text" href="http://www.postgresql.org/docs/current/static/fuzzystrmatch.html">Levenshtein in PostgreSQL</a></li>
+<li><a rel="nofollow" class="external text" href="https://github.com/jmcejuela/Levenshtein-MySQL-UDF">Levenshtein in MySQL</a></li>
+<li><a rel="nofollow" class="external text" href="http://docs.oracle.com/cd/E14072_01/appdev.112/e10577/u_match.htm">Levenshtein in PLSql Oracle 11.2</a></li>
+<li><a rel="nofollow" class="external text" href="https://github.com/rockymadden/stringmetric/blob/master/stringmetric-core/source/core/scala/com/rockymadden/stringmetric/similarity/LevenshteinMetric.scala">Levenshtein</a> and <a rel="nofollow" class="external text" href="https://github.com/rockymadden/stringmetric/blob/master/core/source/core/scala/com/rockymadden/stringmetric/similarity/WeightedLevenshteinMetric.scala">weighted Levenshtein</a> implementations in <a href="http://en.wikipedia.org/wiki/Scala_programming_language" title="Scala programming language" class="mw-redirect">Scala</a> as part of the larger <a rel="nofollow" class="external text" href="http://rockymadden.com/stringmetric/">stringmetric project</a></li>
+<li><span id="CITEREFBlack2008" class="citation">Black, Paul E., ed. (14 August 2008), <a rel="nofollow" class="external text" href="http://www.nist.gov/dads/HTML/Levenshtein.html">"Levenshtein distance"</a>, <i>Dictionary of Algorithms and Data Structures [online]</i>, U.S. National Institute of Standards and Technology<span class="reference-accessdate">, retrieved 3 April 2013</span></span><span title="ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3ALevenshtein+distance&amp;rft.atitle=Dictionary+of+Algorithms+and+Data+Structures+%5Bonline%5D&amp;rft.btitle=Levenshtein+distance&amp;rft.date=14+August+2008&amp;rft.genre=bookitem&amp;rft_id=http%3A%2F%2Fwww.nist.gov%2Fdads%2FHTML%2FLevenshtein.html&amp;rft.pub=U.S.+National+Institute+of+Standards+and+Technology&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook" class="Z3988"><span style="display:none;">&nbsp;</span></span></li>
+</ul>
+
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.392 seconds
+Real time usage: 0.444 seconds
+Preprocessor visited node count: 1122/1000000
+Preprocessor generated node count: 4928/1500000
+Post‐expand include size: 25898/2048000 bytes
+Template argument size: 1751/2048000 bytes
+Highest expansion depth: 9/40
+Expensive parser function count: 2/500
+Lua time usage: 0.048s
+Lua memory usage: 1.72 MB
+-->
+
+<!-- Saved in parser cache with key enwiki:pcache:idhash:406418-0!0!0!!en!4!* and timestamp 20131030195902
+ -->
+<noscript><img src="//en.wikipedia.org/w/index.php?title=Special:CentralAutoLogin/start&amp;type=1x1" alt="" title="" width="1" height="1" style="border: none; position: absolute;" /></noscript></div>								<div class="printfooter">
+				Retrieved from "<a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;oldid=579517000">http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;oldid=579517000</a>"				</div>
+												<div id="catlinks" class="catlinks"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="http://en.wikipedia.org/wiki/Help:Category" title="Help:Category">Categories</a>: <ul><li><a href="http://en.wikipedia.org/wiki/Category:String_similarity_measures" title="Category:String similarity measures">String similarity measures</a></li><li><a href="http://en.wikipedia.org/wiki/Category:Dynamic_programming" title="Category:Dynamic programming">Dynamic programming</a></li><li><a href="http://en.wikipedia.org/wiki/Category:Quantitative_linguistics" title="Category:Quantitative linguistics">Quantitative linguistics</a></li></ul></div><div id="mw-hidden-catlinks" class="mw-hidden-catlinks mw-hidden-cats-hidden">Hidden categories: <ul><li><a href="http://en.wikipedia.org/wiki/Category:Articles_needing_additional_references_from_February_2010" title="Category:Articles needing additional references from February 2010">Articles needing additional references from February 2010</a></li><li><a href="http://en.wikipedia.org/wiki/Category:All_articles_needing_additional_references" title="Category:All articles needing additional references">All articles needing additional references</a></li><li><a href="http://en.wikipedia.org/wiki/Category:Articles_with_example_pseudocode" title="Category:Articles with example pseudocode">Articles with example pseudocode</a></li></ul></div></div>												<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+				<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+	<h3 id="p-personal-label">Personal tools</h3>
+	<ul>
+<li id="pt-createaccount"><a href="http://en.wikipedia.org/w/index.php?title=Special:UserLogin&amp;returnto=Levenshtein+distance&amp;type=signup">Create account</a></li><li id="pt-login"><a href="http://en.wikipedia.org/w/index.php?title=Special:UserLogin&amp;returnto=Levenshtein+distance" title="You're encouraged to log in; however, it's not mandatory. [alt-shift-o]" accesskey="o">Log in</a></li>	</ul>
+</div>
+				<div id="left-navigation">
+					<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+	<h3 id="p-namespaces-label">Namespaces</h3>
+	<ul>
+					<li id="ca-nstab-main" class="selected"><span><a href="http://en.wikipedia.org/wiki/Levenshtein_distance" title="View the content page [alt-shift-c]" accesskey="c">Article</a></span></li>
+					<li id="ca-talk"><span><a href="http://en.wikipedia.org/wiki/Talk:Levenshtein_distance" title="Discussion about the content page [alt-shift-t]" accesskey="t">Talk</a></span></li>
+			</ul>
+</div>
+<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+	<h3 id="mw-vector-current-variant">
+		</h3>
+	<h3 tabindex="0" id="p-variants-label"><span>Variants</span><a tabindex="-1" href="#"></a></h3>
+	<div class="menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+				</div>
+				<div id="right-navigation">
+					<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+	<h3 id="p-views-label">Views</h3>
+	<ul>
+					<li id="ca-view" class="selected"><span><a href="http://en.wikipedia.org/wiki/Levenshtein_distance">Read</a></span></li>
+					<li id="ca-edit"><span><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=edit" title="You can edit this page. 
+Please review your changes before saving. [alt-shift-e]" accesskey="e">Edit</a></span></li>
+					<li style="display: block;" id="ca-history" class="collapsible"><span><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=history" title="Past versions of this page [alt-shift-h]" accesskey="h">View history</a></span></li>
+			</ul>
+</div>
+<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+	<h3 style="" tabindex="0" id="p-cactions-label"><span>Actions</span><a tabindex="-1" href="#"></a></h3>
+	<div class="menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+<div id="p-search" role="search">
+	<h3><label for="searchInput">Search</label></h3>
+	<form action="/w/index.php" id="searchform">
+				<div id="simpleSearch">
+						<input autocomplete="off" tabindex="1" name="search" placeholder="Search" title="Search Wikipedia [alt-shift-f]" accesskey="f" id="searchInput">						<button type="submit" name="button" title="Search Wikipedia for this text" id="searchButton"><img src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/search-ltr.png" alt="Search" height="13" width="12"></button>								<input name="title" value="Special:Search" type="hidden">
+		</div>
+	</form>
+</div>
+				</div>
+			</div>
+			<div class="collapsible-nav" id="mw-panel">
+					<div id="p-logo" role="banner"><a style="background-image: url(//upload.wikimedia.org/wikipedia/en/b/bc/Wiki.png);" href="http://en.wikipedia.org/wiki/Main_Page" title="Visit the main page"></a></div>
+				<div class="portal first persistent" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+	<h3 id="p-navigation-label">Navigation</h3>
+	<div class="body">
+		<ul>
+			<li id="n-mainpage-description"><a href="http://en.wikipedia.org/wiki/Main_Page" title="Visit the main page [alt-shift-z]" accesskey="z">Main page</a></li>
+			<li id="n-contents"><a href="http://en.wikipedia.org/wiki/Portal:Contents" title="Guides to browsing Wikipedia">Contents</a></li>
+			<li id="n-featuredcontent"><a href="http://en.wikipedia.org/wiki/Portal:Featured_content" title="Featured content – the best of Wikipedia">Featured content</a></li>
+			<li id="n-currentevents"><a href="http://en.wikipedia.org/wiki/Portal:Current_events" title="Find background information on current events">Current events</a></li>
+			<li id="n-randompage"><a href="http://en.wikipedia.org/wiki/Special:Random" title="Load a random article [alt-shift-x]" accesskey="x">Random article</a></li>
+			<li id="n-sitesupport"><a href="https://donate.wikimedia.org/wiki/Special:FundraiserRedirector?utm_source=donate&amp;utm_medium=sidebar&amp;utm_campaign=C13_en.wikipedia.org&amp;uselang=en" title="Support us">Donate to Wikipedia</a></li>
+		</ul>
+	</div>
+</div>
+<div class="portal expanded" role="navigation" id="p-interaction" aria-labelledby="p-interaction-label">
+	<h3 tabindex="2" id="p-interaction-label"><a aria-expanded="true" aria-pressed="true" role="button" aria-controls="p-interaction-list" aria-haspopup="true" href="#">Interaction</a></h3>
+	<div style="display: block;" class="body">
+		<ul id="p-interaction-list">
+			<li id="n-help"><a href="http://en.wikipedia.org/wiki/Help:Contents" title="Guidance on how to use and edit Wikipedia">Help</a></li>
+			<li id="n-aboutsite"><a href="http://en.wikipedia.org/wiki/Wikipedia:About" title="Find out about Wikipedia">About Wikipedia</a></li>
+			<li id="n-portal"><a href="http://en.wikipedia.org/wiki/Wikipedia:Community_portal" title="About the project, what you can do, where to find things">Community portal</a></li>
+			<li id="n-recentchanges"><a href="http://en.wikipedia.org/wiki/Special:RecentChanges" title="A list of recent changes in the wiki [alt-shift-r]" accesskey="r">Recent changes</a></li>
+			<li id="n-contactpage"><a href="http://en.wikipedia.org/wiki/Wikipedia:Contact_us">Contact page</a></li>
+		</ul>
+	</div>
+</div>
+<div class="portal collapsed" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+	<h3 tabindex="3" id="p-tb-label"><a aria-expanded="false" aria-pressed="false" role="button" aria-controls="p-tb-list" aria-haspopup="true" href="#">Tools</a></h3>
+	<div class="body">
+		<ul id="p-tb-list">
+			<li id="t-whatlinkshere"><a href="http://en.wikipedia.org/wiki/Special:WhatLinksHere/Levenshtein_distance" title="List of all English Wikipedia pages containing links to this page [alt-shift-j]" accesskey="j">What links here</a></li>
+			<li id="t-recentchangeslinked"><a href="http://en.wikipedia.org/wiki/Special:RecentChangesLinked/Levenshtein_distance" title="Recent changes in pages linked from this page [alt-shift-k]" accesskey="k">Related changes</a></li>
+			<li id="t-upload"><a href="http://en.wikipedia.org/wiki/Wikipedia:File_Upload_Wizard" title="Upload files [alt-shift-u]" accesskey="u">Upload file</a></li>
+			<li id="t-specialpages"><a href="http://en.wikipedia.org/wiki/Special:SpecialPages" title="A list of all special pages [alt-shift-q]" accesskey="q">Special pages</a></li>
+			<li id="t-permalink"><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;oldid=579517000" title="Permanent link to this revision of the page">Permanent link</a></li>
+			<li id="t-info"><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;action=info">Page information</a></li>
+			<li id="t-wikibase"><a href="http://www.wikidata.org/wiki/Q496939" title="Link to connected data repository item">Data item</a></li>
+<li id="t-cite"><a href="http://en.wikipedia.org/w/index.php?title=Special:Cite&amp;page=Levenshtein_distance&amp;id=579517000" title="Information on how to cite this page">Cite this page</a></li>		</ul>
+	</div>
+</div>
+<div class="portal collapsed" role="navigation" id="p-coll-print_export" aria-labelledby="p-coll-print_export-label">
+	<h3 tabindex="4" id="p-coll-print_export-label"><a aria-expanded="false" aria-pressed="false" role="button" aria-controls="p-coll-print_export-list" aria-haspopup="true" href="#">Print/export</a></h3>
+	<div class="body">
+		<ul id="p-coll-print_export-list">
+			<li id="coll-create_a_book"><a href="http://en.wikipedia.org/w/index.php?title=Special:Book&amp;bookcmd=book_creator&amp;referer=Levenshtein+distance">Create a book</a></li>
+			<li id="coll-download-as-rl"><a href="http://en.wikipedia.org/w/index.php?title=Special:Book&amp;bookcmd=render_article&amp;arttitle=Levenshtein+distance&amp;oldid=579517000&amp;writer=rl">Download as PDF</a></li>
+			<li id="t-print"><a href="http://en.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;printable=yes" title="Printable version of this page [alt-shift-p]" accesskey="p">Printable version</a></li>
+		</ul>
+	</div>
+</div>
+<div class="portal expanded" role="navigation" id="p-lang" aria-labelledby="p-lang-label"><span aria-haspopup="true" role="button" tabindex="0" title="Language settings" class="uls-settings-trigger"></span>
+	<h3 tabindex="5" id="p-lang-label"><a aria-expanded="true" aria-pressed="true" role="button" aria-controls="p-lang-list" aria-haspopup="true" href="#">Languages</a></h3>
+	<div style="display: block;" class="body">
+		<ul id="p-lang-list">
+			<li class="interwiki-af"><a href="http://af.wikipedia.org/wiki/Levenshteinafstand" title="Levenshteinafstand – Afrikaans" hreflang="af" lang="af">Afrikaans</a></li>
+			<li class="interwiki-ca"><a href="http://ca.wikipedia.org/wiki/Dist%C3%A0ncia_de_Levenshtein" title="Distància de Levenshtein – Catalan" hreflang="ca" lang="ca">Català</a></li>
+			<li class="interwiki-de"><a href="http://de.wikipedia.org/wiki/Levenshtein-Distanz" title="Levenshtein-Distanz – German" hreflang="de" lang="de">Deutsch</a></li>
+			<li class="interwiki-es"><a href="http://es.wikipedia.org/wiki/Distancia_de_Levenshtein" title="Distancia de Levenshtein – Spanish" hreflang="es" lang="es">Español</a></li>
+			<li class="interwiki-fa"><a href="http://fa.wikipedia.org/wiki/%D9%81%D8%A7%D8%B5%D9%84%D9%87_%D9%84%D9%88%D9%86%E2%80%8C%D8%A7%D8%B4%D8%AA%D8%A7%DB%8C%D9%86" title="فاصله لون‌اشتاین – Persian" hreflang="fa" lang="fa">فارسی</a></li>
+			<li class="interwiki-fr"><a href="http://fr.wikipedia.org/wiki/Distance_de_Levenshtein" title="Distance de Levenshtein – French" hreflang="fr" lang="fr">Français</a></li>
+			<li class="interwiki-it"><a href="http://it.wikipedia.org/wiki/Distanza_di_Levenshtein" title="Distanza di Levenshtein – Italian" hreflang="it" lang="it">Italiano</a></li>
+			<li class="interwiki-he"><a href="http://he.wikipedia.org/wiki/%D7%9E%D7%A8%D7%97%D7%A7_%D7%9C%D7%95%D7%99%D7%A0%D7%A9%D7%98%D7%99%D7%99%D7%9F" title="מרחק לוינשטיין – Hebrew" hreflang="he" lang="he">עברית</a></li>
+			<li class="interwiki-lv"><a href="http://lv.wikipedia.org/wiki/Leven%C5%A1teina_att%C4%81lums" title="Levenšteina attālums – Latvian" hreflang="lv" lang="lv">Latviešu</a></li>
+			<li class="interwiki-nl"><a href="http://nl.wikipedia.org/wiki/Levenshteinafstand" title="Levenshteinafstand – Dutch" hreflang="nl" lang="nl">Nederlands</a></li>
+			<li class="interwiki-ja"><a href="http://ja.wikipedia.org/wiki/%E3%83%AC%E3%83%BC%E3%83%99%E3%83%B3%E3%82%B7%E3%83%A5%E3%82%BF%E3%82%A4%E3%83%B3%E8%B7%9D%E9%9B%A2" title="レーベンシュタイン距離 – Japanese" hreflang="ja" lang="ja">日本語</a></li>
+			<li class="interwiki-nn"><a href="http://nn.wikipedia.org/wiki/Levenshtein-distanse" title="Levenshtein-distanse – Norwegian Nynorsk" hreflang="nn" lang="nn">Norsk nynorsk</a></li>
+			<li class="interwiki-nds"><a href="http://nds.wikipedia.org/wiki/Levenshtein-Afstand" title="Levenshtein-Afstand – Low German" hreflang="nds" lang="nds">Plattdüütsch</a></li>
+			<li class="interwiki-pl"><a href="http://pl.wikipedia.org/wiki/Odleg%C5%82o%C5%9B%C4%87_Levenshteina" title="Odległość Levenshteina – Polish" hreflang="pl" lang="pl">Polski</a></li>
+			<li class="interwiki-pt"><a href="http://pt.wikipedia.org/wiki/Dist%C3%A2ncia_Levenshtein" title="Distância Levenshtein – Portuguese" hreflang="pt" lang="pt">Português</a></li>
+			<li class="interwiki-ru"><a href="http://ru.wikipedia.org/wiki/%D0%A0%D0%B0%D1%81%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D0%B5_%D0%9B%D0%B5%D0%B2%D0%B5%D0%BD%D1%88%D1%82%D0%B5%D0%B9%D0%BD%D0%B0" title="Расстояние Левенштейна – Russian" hreflang="ru" lang="ru">Русский</a></li>
+			<li class="interwiki-simple"><a href="http://simple.wikipedia.org/wiki/Levenshtein_Distance" title="Levenshtein Distance – Simple English" hreflang="simple" lang="simple">Simple English</a></li>
+			<li class="interwiki-sr"><a href="http://sr.wikipedia.org/wiki/%D0%9B%D0%B5%D0%B2%D0%B5%D0%BD%D1%88%D1%82%D0%B0%D1%98%D0%BD%D0%BE%D0%B2%D0%BE_%D1%80%D0%B0%D1%81%D1%82%D0%BE%D1%98%D0%B0%D1%9A%D0%B5" title="Левенштајново растојање – Serbian" hreflang="sr" lang="sr">Српски / srpski</a></li>
+			<li class="interwiki-fi"><a href="http://fi.wikipedia.org/wiki/Leven%C5%A1teinin_et%C3%A4isyys" title="Levenšteinin etäisyys – Finnish" hreflang="fi" lang="fi">Suomi</a></li>
+			<li class="interwiki-sv"><a href="http://sv.wikipedia.org/wiki/Levenshteinavst%C3%A5nd" title="Levenshteinavstånd – Swedish" hreflang="sv" lang="sv">Svenska</a></li>
+			<li class="interwiki-th"><a href="http://th.wikipedia.org/wiki/%E0%B8%A3%E0%B8%B0%E0%B8%A2%E0%B8%B0%E0%B8%97%E0%B8%B2%E0%B8%87%E0%B9%80%E0%B8%A5%E0%B9%80%E0%B8%A7%E0%B8%99%E0%B8%8A%E0%B9%80%E0%B8%95%E0%B8%A2%E0%B9%8C%E0%B8%99" title="ระยะทางเลเวนชเตย์น – Thai" hreflang="th" lang="th">ไทย</a></li>
+			<li class="interwiki-tg"><a href="http://tg.wikipedia.org/wiki/%D0%9C%D0%B0%D1%81%D0%BE%D1%84%D0%B0%D0%B8_%D0%9B%D0%B5%D0%B2%D0%B5%D0%BD%D1%88%D1%82%D0%B5%D0%B9%D0%BD" title="Масофаи Левенштейн – Tajik" hreflang="tg" lang="tg">Тоҷикӣ</a></li>
+			<li class="interwiki-uk"><a href="http://uk.wikipedia.org/wiki/%D0%92%D1%96%D0%B4%D1%81%D1%82%D0%B0%D0%BD%D1%8C_%D0%9B%D0%B5%D0%B2%D0%B5%D0%BD%D1%88%D1%82%D0%B5%D0%B9%D0%BD%D0%B0" title="Відстань Левенштейна – Ukrainian" hreflang="uk" lang="uk">Українська</a></li>
+			<li class="interwiki-vi"><a href="http://vi.wikipedia.org/wiki/Kho%E1%BA%A3ng_c%C3%A1ch_Levenshtein" title="Khoảng cách Levenshtein – Vietnamese" hreflang="vi" lang="vi">Tiếng Việt</a></li>
+			<li class="interwiki-zh"><a href="http://zh.wikipedia.org/wiki/%E7%B7%A8%E8%BC%AF%E8%B7%9D%E9%9B%A2" title="編輯距離 – Chinese" hreflang="zh" lang="zh">中文</a></li>
+			
+			<li class="wbc-editpage"><a href="http://www.wikidata.org/wiki/Q496939#sitelinks-wikipedia" title="Edit interlanguage links">Edit links</a></li>
+		</ul>
+	</div>
+</div>
+			</div>
+		</div>
+		<div id="footer" role="contentinfo">
+							<ul id="footer-info">
+											<li id="footer-info-lastmod"> This page was last modified on 30 October 2013 at 19:59.<br></li>
+											<li id="footer-info-copyright">Text is available under the <a rel="license" href="http://en.wikipedia.org/wiki/Wikipedia:Text_of_Creative_Commons_Attribution-ShareAlike_3.0_Unported_License">Creative Commons Attribution-ShareAlike License</a><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/" style="display:none;"></a>;
+additional terms may apply.  By using this site, you agree to the <a href="http://wikimediafoundation.org/wiki/Terms_of_Use">Terms of Use</a> and <a href="http://wikimediafoundation.org/wiki/Privacy_policy">Privacy Policy.</a> <br>
+Wikipedia® is a registered trademark of the <a href="http://www.wikimediafoundation.org/">Wikimedia Foundation, Inc.</a>, a non-profit organization.</li>
+									</ul>
+							<ul id="footer-places">
+											<li id="footer-places-privacy"><a href="http://wikimediafoundation.org/wiki/Privacy_policy" title="wikimedia:Privacy policy">Privacy policy</a></li>
+											<li id="footer-places-about"><a href="http://en.wikipedia.org/wiki/Wikipedia:About" title="Wikipedia:About">About Wikipedia</a></li>
+											<li id="footer-places-disclaimer"><a href="http://en.wikipedia.org/wiki/Wikipedia:General_disclaimer" title="Wikipedia:General disclaimer">Disclaimers</a></li>
+											<li id="footer-places-contact"><a href="http://en.wikipedia.org/wiki/Wikipedia:Contact_us">Contact Wikipedia</a></li>
+											<li id="footer-places-developers"><a class="external" href="https://www.mediawiki.org/wiki/Special:MyLanguage/How_to_contribute">Developers</a></li>
+											<li id="footer-places-mobileview"><a href="http://en.m.wikipedia.org/w/index.php?title=Levenshtein_distance&amp;title=Levenshtein_distance" class="noprint stopMobileRedirectToggle">Mobile view</a></li>
+									</ul>
+										<ul id="footer-icons" class="noprint">
+					<li id="footer-copyrightico">
+						<a href="http://wikimediafoundation.org/"><img src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/wikimedia-button.png" alt="Wikimedia Foundation" height="31" width="88"></a>
+					</li>
+					<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" height="31" width="88"></a>
+					</li>
+				</ul>
+						<div style="clear:both"></div>
+		</div>
+		<script>/*<![CDATA[*/window.jQuery && jQuery.ready();/*]]>*/</script><script>if(window.mw){
+mw.loader.state({"site":"loading","user":"ready","user.groups":"ready"});
+}</script>
+<script>if(window.mw){
+mw.loader.load(["mobile.desktop","mediawiki.action.view.postEdit","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.searchSuggest","ext.cite","ext.gadget.teahouse","ext.gadget.ReferenceTooltips","ext.gadget.DRN-wizard","ext.gadget.charinsert","mw.MwEmbedSupport.style","ext.articleFeedbackv5.startup","ext.wikimediaEvents.ve","ext.navigationTiming","schema.UniversalLanguageSelector","ext.uls.eventlogger","mw.PopUpMediaTransform","skins.vector.collapsibleNav"],null,true);
+}</script>
+<script src="Levenshtein%20distance%20-%20Wikipedia,%20the%20free%20encyclopedia_files/load_003.php"></script>
+<!-- Served by mw1214 in 0.176 secs. -->
+	
+
+<div class="suggestions" style="display: none; font-size: 13px;"><div class="suggestions-results"></div><div class="suggestions-special"></div></div></body></html>
